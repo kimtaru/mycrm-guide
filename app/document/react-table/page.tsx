@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import TocAside from "../toc-aside";
 import type { TocGroup } from "../toc-aside";
+import BasicDemo from "./basic-demo";
+import { SingleSortDemo, MultiSortDemo } from "./sorting-demo";
 
 export const metadata: Metadata = {
   title: "@mycrm-ui/react-table - mycrm UI",
@@ -47,6 +49,11 @@ export default function ReactTablePage() {
             <p className="text-xl font-light leading-relaxed text-on-surface-variant">
               React 19 / React 18에서 사용 가능한 고성능 테이블 컴포넌트입니다.
             </p>
+            <p className="mt-3 rounded-lg bg-surface-container-low p-3 text-sm text-on-surface-variant">
+              <code>@mycrm-ui/react-table</code>은 헤드리스(Headless) 라이브러리입니다.
+              소스코드를 그대로 사용하면 스타일이 적용되지 않은 상태로 렌더링됩니다.
+              문서의 미리보기는 이해를 돕기 위해 별도 스타일을 적용한 예시입니다.
+            </p>
           </header>
 
           <section className="mb-16" id="react-table-basic">
@@ -59,38 +66,7 @@ export default function ReactTablePage() {
             <p className="mb-6 leading-relaxed text-on-surface-variant">
               <code>columns</code>, <code>data</code>, <code>rowKey</code>만으로 기본 테이블을 렌더링합니다.
             </p>
-            <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-              <code>{`import { Table } from '@mycrm-ui/react-table'
-import type { ColumnDef } from '@mycrm-ui/react-table'
-
-interface User {
-  id: number
-  name: string
-  email: string
-  role: string
-}
-
-const columns: ColumnDef<User>[] = [
-  { key: 'name', label: '이름', render: (row) => row.name },
-  { key: 'email', label: '이메일', render: (row) => row.email },
-  { key: 'role', label: '역할', render: (row) => row.role },
-]
-
-const data: User[] = [
-  { id: 1, name: '홍길동', email: 'hong@example.com', role: '관리자' },
-  { id: 2, name: '김철수', email: 'kim@example.com', role: '사용자' },
-]
-
-export default function UserTable() {
-  return (
-    <Table
-      columns={columns}
-      data={data}
-      rowKey={(row) => String(row.id)}
-    />
-  )
-}`}</code>
-            </pre>
+            <BasicDemo />
           </section>
 
           <section className="mb-16" id="react-table-sorting">
@@ -101,46 +77,14 @@ export default function UserTable() {
               <h2 className="text-2xl font-bold text-on-surface">정렬</h2>
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">단일 정렬과 멀티 정렬을 모두 지원합니다.</p>
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div>
                 <p className="mb-3 font-medium text-on-surface">단일 정렬</p>
-                <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-                  <code>{`import { useState } from 'react'
-import type { SortState } from '@mycrm-ui/react-table'
-
-const [sort, setSort] = useState<SortState | null>(null)
-
-<Table
-  columns={columns}
-  data={data}
-  rowKey={(row) => String(row.id)}
-  sorting={{
-    sort,
-    onSortChange: setSort,
-  }}
-/>`}</code>
-                </pre>
+                <SingleSortDemo />
               </div>
               <div>
                 <p className="mb-3 font-medium text-on-surface">멀티 정렬</p>
-                <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-                  <code>{`const [sorts, setSorts] = useState<SortState[]>([])
-
-<Table
-  columns={columns}
-  data={data}
-  rowKey={(row) => String(row.id)}
-  sorting={{
-    sorts,
-    onSortsChange: setSorts,
-    icons: {
-      none: <SortIcon />,
-      asc: <AscIcon />,
-      desc: <DescIcon />,
-    },
-  }}
-/>`}</code>
-                </pre>
+                <MultiSortDemo />
               </div>
             </div>
           </section>

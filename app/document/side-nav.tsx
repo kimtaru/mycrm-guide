@@ -8,7 +8,7 @@ interface SubGroup {
   items: { href: string; label: string }[];
 }
 
-const SUB_GROUPS: SubGroup[] = [
+const PACKAGE_GROUPS: SubGroup[] = [
   {
     label: "@mycrm-ui/core",
     items: [
@@ -26,8 +26,11 @@ const SUB_GROUPS: SubGroup[] = [
       { href: "/document/react#react-hooks", label: "훅" },
     ],
   },
+];
+
+const COMPONENT_GROUPS: SubGroup[] = [
   {
-    label: "@mycrm-ui/react-table",
+    label: "Table",
     items: [
       { href: "/document/react-table#react-table-basic", label: "기본 사용" },
       { href: "/document/react-table#react-table-sorting", label: "정렬" },
@@ -49,7 +52,7 @@ const SUB_GROUPS: SubGroup[] = [
 ];
 
 function CollapsibleGroup({ group }: { group: SubGroup }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <div>
@@ -116,7 +119,19 @@ export default function SideNav() {
       </div>
 
       <div className="space-y-1">
-        {SUB_GROUPS.map((group) => (
+        {PACKAGE_GROUPS.map((group) => (
+          <CollapsibleGroup key={group.label} group={group} />
+        ))}
+      </div>
+
+      {/* 컴포넌트 */}
+      <div className="mx-2 mt-6 mb-2 flex items-center gap-2 px-4 py-2">
+        <span className="inline-block h-1.5 w-1.5 rounded-full bg-secondary" />
+        <span className="text-sm font-semibold text-on-surface">컴포넌트</span>
+      </div>
+
+      <div className="space-y-1">
+        {COMPONENT_GROUPS.map((group) => (
           <CollapsibleGroup key={group.label} group={group} />
         ))}
       </div>
