@@ -1,8 +1,130 @@
 import type { Metadata } from "next";
+import { codeToHtml } from "shiki";
 import TocAside from "../toc-aside";
 import type { TocGroup } from "../toc-aside";
 import BasicDemo from "./basic-demo";
 import { SingleSortDemo, MultiSortDemo } from "./sorting-demo";
+
+const BASIC_CODE = `import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef } from '@mycrm-ui/react-table'
+
+interface User {
+  id: number
+  name: string
+  email: string
+  role: string
+}
+
+const columns: ColumnDef<User>[] = [
+  { key: 'name', label: '이름', render: (row) => row.name },
+  { key: 'email', label: '이메일', render: (row) => row.email },
+  { key: 'role', label: '역할', render: (row) => row.role },
+]
+
+const data: User[] = [
+  { id: 1, name: '홍길동', email: 'hong@example.com', role: '관리자' },
+  { id: 2, name: '김철수', email: 'kim@example.com', role: '사용자' },
+  { id: 3, name: '이영희', email: 'lee@example.com', role: '사용자' },
+]
+
+export default function UserTable() {
+  return (
+    <Table
+      columns={columns}
+      data={data}
+      rowKey={(row) => String(row.id)}
+    />
+  )
+}`;
+
+const SINGLE_SORT_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef, SortState } from '@mycrm-ui/react-table'
+
+interface User {
+  id: number
+  name: string
+  email: string
+  role: string
+  age: number
+}
+
+const columns: ColumnDef<User>[] = [
+  { key: 'name', label: '이름', sortable: true, render: (row) => row.name },
+  { key: 'email', label: '이메일', sortable: true, render: (row) => row.email },
+  { key: 'role', label: '역할', sortable: true, render: (row) => row.role },
+  { key: 'age', label: '나이', sortable: true, render: (row) => row.age },
+]
+
+const data: User[] = [
+  { id: 1, name: '홍길동', email: 'hong@example.com', role: '관리자', age: 35 },
+  { id: 2, name: '김철수', email: 'kim@example.com', role: '사용자', age: 28 },
+  { id: 3, name: '이영희', email: 'lee@example.com', role: '사용자', age: 42 },
+]
+
+export default function SingleSortExample() {
+  const [sort, setSort] = useState<SortState | null>(null)
+
+  return (
+    <Table
+      columns={columns}
+      data={data}
+      rowKey={(row) => String(row.id)}
+      sorting={{
+        sort,
+        onSortChange: setSort,
+      }}
+    />
+  )
+}`;
+
+const MULTI_SORT_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef, SortState } from '@mycrm-ui/react-table'
+
+interface Product {
+  id: number
+  category: string
+  brand: string
+  price: number
+}
+
+const columns: ColumnDef<Product>[] = [
+  { key: 'category', label: '카테고리', sortable: true, render: (row) => row.category },
+  { key: 'brand', label: '브랜드', sortable: true, render: (row) => row.brand },
+  { key: 'price', label: '가격', sortable: true,
+    render: (row) => \`\${row.price.toLocaleString()}원\` },
+]
+
+const data: Product[] = [
+  { id: 1, category: '노트북', brand: '삼성', price: 1500000 },
+  { id: 2, category: '노트북', brand: 'LG', price: 1500000 },
+  { id: 3, category: '노트북', brand: '삼성', price: 1200000 },
+  { id: 4, category: '모니터', brand: 'LG', price: 450000 },
+  { id: 5, category: '모니터', brand: '삼성', price: 450000 },
+  { id: 6, category: '모니터', brand: 'LG', price: 320000 },
+]
+
+export default function MultiSortExample() {
+  // Shift + 헤더 클릭으로 멀티 정렬
+  const [sorts, setSorts] = useState<SortState[]>([])
+
+  return (
+    <Table
+      columns={columns}
+      data={data}
+      rowKey={(row) => String(row.id)}
+      sorting={{
+        sorts,
+        onSortsChange: setSorts,
+      }}
+    />
+  )
+}`;
+
+async function highlight(code: string) {
+  return codeToHtml(code, { lang: "tsx", theme: "one-dark-pro" });
+}
 
 export const metadata: Metadata = {
   title: "@mycrm-ui/react-table - mycrm UI",
@@ -32,7 +154,12 @@ const TOC_GROUPS: TocGroup[] = [
   },
 ];
 
-export default function ReactTablePage() {
+export default async function ReactTablePage() {
+  const [basicHtml, singleSortHtml, multiSortHtml] = await Promise.all([
+    highlight(BASIC_CODE),
+    highlight(SINGLE_SORT_CODE),
+    highlight(MULTI_SORT_CODE),
+  ]);
   return (
     <>
       <main className="flex-1 bg-surface px-8 py-12 lg:px-16">
@@ -66,7 +193,7 @@ export default function ReactTablePage() {
             <p className="mb-6 leading-relaxed text-on-surface-variant">
               <code>columns</code>, <code>data</code>, <code>rowKey</code>만으로 기본 테이블을 렌더링합니다.
             </p>
-            <BasicDemo />
+            <BasicDemo codeHtml={basicHtml} />
           </section>
 
           <section className="mb-16" id="react-table-sorting">
@@ -80,11 +207,11 @@ export default function ReactTablePage() {
             <div className="space-y-8">
               <div>
                 <p className="mb-3 font-medium text-on-surface">단일 정렬</p>
-                <SingleSortDemo />
+                <SingleSortDemo codeHtml={singleSortHtml} />
               </div>
               <div>
                 <p className="mb-3 font-medium text-on-surface">멀티 정렬</p>
-                <MultiSortDemo />
+                <MultiSortDemo codeHtml={multiSortHtml} />
               </div>
             </div>
           </section>
