@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
 @theme {
   /* Design tokens — design/design.md + design/main/code.html */
   --color-on-primary-fixed: #001849;
