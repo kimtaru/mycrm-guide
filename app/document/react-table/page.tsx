@@ -4,6 +4,10 @@ import TocAside from "../toc-aside";
 import type { TocGroup } from "../toc-aside";
 import BasicDemo from "./basic-demo";
 import { SingleSortDemo, MultiSortDemo } from "./sorting-demo";
+import SelectionDemo from "./selection-demo";
+import FilterDemo from "./filter-demo";
+import RowActionsDemo from "./row-actions-demo";
+import EditingDemo from "./editing-demo";
 
 const BASIC_CODE = `import { Table } from '@mycrm-ui/react-table'
 import type { ColumnDef } from '@mycrm-ui/react-table'
@@ -122,6 +126,300 @@ export default function MultiSortExample() {
   )
 }`;
 
+const SELECTION_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef } from '@mycrm-ui/react-table'
+
+interface User {
+  id: number
+  name: string
+  email: string
+  role: string
+}
+
+const columns: ColumnDef<User>[] = [
+  { key: 'name', label: '이름', render: (row) => row.name },
+  { key: 'email', label: '이메일', render: (row) => row.email },
+  { key: 'role', label: '역할', render: (row) => row.role },
+]
+
+const data: User[] = [
+  { id: 1, name: '홍길동', email: 'hong@example.com', role: '관리자' },
+  { id: 2, name: '김철수', email: 'kim@example.com', role: '사용자' },
+  { id: 3, name: '이영희', email: 'lee@example.com', role: '사용자' },
+  { id: 4, name: '박민수', email: 'park@example.com', role: '편집자' },
+  { id: 5, name: '최지은', email: 'choi@example.com', role: '사용자' },
+]
+
+export default function SelectionExample() {
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+
+  return (
+    <Table
+      columns={columns}
+      data={data}
+      rowKey={(row) => String(row.id)}
+      selection={{
+        enabled: true,
+        keys: selectedKeys,
+        onChange: setSelectedKeys,
+      }}
+    />
+  )
+}`;
+
+const FILTER_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef } from '@mycrm-ui/react-table'
+
+interface User {
+  id: number
+  name: string
+  email: string
+  role: string
+}
+
+const columns: ColumnDef<User>[] = [
+  {
+    key: 'name',
+    label: '이름',
+    render: (row) => row.name,
+    filterType: 'text',
+    filterPlaceholder: '이름 검색...',
+  },
+  {
+    key: 'email',
+    label: '이메일',
+    render: (row) => row.email,
+    filterType: 'text',
+    filterPlaceholder: '이메일 검색...',
+  },
+  {
+    key: 'role',
+    label: '역할',
+    render: (row) => row.role,
+    filterType: 'select',
+    filterOptions: [
+      { label: '관리자', value: '관리자' },
+      { label: '사용자', value: '사용자' },
+      { label: '편집자', value: '편집자' },
+    ],
+  },
+]
+
+const data: User[] = [
+  { id: 1, name: '홍길동', email: 'hong@example.com', role: '관리자' },
+  { id: 2, name: '김철수', email: 'kim@example.com', role: '사용자' },
+  { id: 3, name: '이영희', email: 'lee@example.com', role: '사용자' },
+  { id: 4, name: '박민수', email: 'park@example.com', role: '편집자' },
+  { id: 5, name: '최지은', email: 'choi@example.com', role: '사용자' },
+]
+
+export default function FilterExample() {
+  const [filterEnabled, setFilterEnabled] = useState(true)
+  const [filterValues, setFilterValues] = useState<Record<string, string>>({})
+
+  return (
+    <Table
+      columns={columns}
+      data={data}
+      rowKey={(row) => String(row.id)}
+      filter={{
+        enabled: filterEnabled,
+        values: filterValues,
+        onChange: (colKey, value) =>
+          setFilterValues((prev) => ({ ...prev, [colKey]: value })),
+        debounce: 300,
+      }}
+      headerMenuItems={[
+        {
+          label: filterEnabled ? '필터 숨기기' : '필터 표시',
+          onClick: () => setFilterEnabled((v) => !v),
+        },
+      ]}
+      headerMenuIcon={<MoreHorizIcon />}
+    />
+  )
+}`;
+
+const ROW_ACTIONS_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef } from '@mycrm-ui/react-table'
+
+interface User {
+  id: number
+  name: string
+  email: string
+  role: string
+}
+
+const initialData: User[] = [
+  { id: 1, name: '홍길동', email: 'hong@example.com', role: '관리자' },
+  { id: 2, name: '김철수', email: 'kim@example.com', role: '사용자' },
+  { id: 3, name: '이영희', email: 'lee@example.com', role: '사용자' },
+]
+
+// insertable: true인 컬럼에 추가 행의 input이 자동 렌더링됨
+const columns: ColumnDef<User>[] = [
+  { key: 'name', label: '이름', insertable: true, render: (row) => row.name },
+  { key: 'email', label: '이메일', insertable: true, render: (row) => row.email },
+  { key: 'role', label: '역할', insertable: true, render: (row) => row.role },
+]
+
+export default function RowActionsExample() {
+  const [data, setData] = useState<User[]>(initialData)
+  const [nextId, setNextId] = useState(4)
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+  const [isAdding, setIsAdding] = useState(false)
+
+  return (
+    <>
+      <div className="flex justify-end gap-2 mb-4">
+        <button onClick={() => setIsAdding(true)}>추가</button>
+        <button
+          onClick={() => {
+            setData((prev) =>
+              prev.filter((r) => !selectedKeys.includes(String(r.id))))
+            setSelectedKeys([])
+          }}
+          disabled={selectedKeys.length === 0}
+        >
+          삭제 ({selectedKeys.length})
+        </button>
+      </div>
+
+      <Table
+        columns={columns}
+        data={data}
+        rowKey={(row) => String(row.id)}
+        selection={{
+          enabled: true,
+          keys: selectedKeys,
+          onChange: setSelectedKeys,
+        }}
+        rowActions={{
+          // 개별 행 삭제
+          deletable: true,
+          onDelete: (rowKey) =>
+            setData((prev) => prev.filter((r) => String(r.id) !== rowKey)),
+          deleteIcon: <TrashIcon />,
+          // 행 추가 (insertable 컬럼에 input 자동 렌더링)
+          adding: isAdding,
+          onAdd: (values) => {
+            setData((prev) => [...prev, { id: nextId, ...values } as User])
+            setNextId((n) => n + 1)
+            setIsAdding(false)
+          },
+          onAddCancel: () => setIsAdding(false),
+        }}
+        // classNames.addRow / addInput / addConfirmBtn / addCancelBtn으로
+        // 추가 행 스타일링 가능
+      />
+    </>
+  )
+}`;
+
+const EDITING_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef, EditCellProps } from '@mycrm-ui/react-table'
+
+interface User {
+  id: number
+  name: string
+  email: string
+  role: string
+}
+
+const initialData: User[] = [
+  { id: 1, name: '홍길동', email: 'hong@example.com', role: '관리자' },
+  { id: 2, name: '김철수', email: 'kim@example.com', role: '사용자' },
+  { id: 3, name: '이영희', email: 'lee@example.com', role: '사용자' },
+]
+
+// 공통 편집 UI를 별도 함수로 분리
+// validate 실패 시 error에 에러 메시지가 전달됨
+function renderEditCellUI({ value, onChange, onSave, onCancel, error }: EditCellProps) {
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+        <input value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') onSave()
+            if (e.key === 'Escape') onCancel()
+          }}
+          style={{ borderColor: error ? 'red' : undefined }}
+          autoFocus />
+        <button onClick={onSave}>✓</button>
+        <button onClick={onCancel}>✕</button>
+      </div>
+      {error && <p style={{ color: 'red', fontSize: 11 }}>{error}</p>}
+    </div>
+  )
+}
+
+const columns: ColumnDef<User>[] = [
+  {
+    key: 'name',
+    label: '이름',
+    render: (row) => row.name,
+    editable: true,
+    validate: (value) => value.trim() ? null : '이름은 필수입니다.',
+  },
+  {
+    key: 'email',
+    label: '이메일',
+    render: (row) => row.email,
+    editable: true,
+    validate: (value) =>
+      !value.trim()
+        ? '이메일은 필수입니다.'
+        : !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value)
+          ? '올바른 이메일 형식이 아닙니다.'
+          : null,
+  },
+  {
+    key: 'role',
+    label: '역할',
+    render: (row) => row.role,
+    editable: true,
+    // renderEditCell: 이 컬럼만 개별 편집 UI 적용 (editing.renderCell보다 우선)
+    renderEditCell: ({ value, onChange, onSave, onCancel }) => (
+      <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+        <select value={value}
+          onChange={(e) => onChange(e.target.value)} autoFocus>
+          <option value="관리자">관리자</option>
+          <option value="사용자">사용자</option>
+          <option value="편집자">편집자</option>
+        </select>
+        <button onClick={onSave}>✓</button>
+        <button onClick={onCancel}>✕</button>
+      </div>
+    ),
+  },
+]
+
+export default function EditingExample() {
+  const [data, setData] = useState<User[]>(initialData)
+
+  return (
+    <Table
+      columns={columns}
+      data={data}
+      rowKey={(row) => String(row.id)}
+      editing={{
+        onCellChange: (rowKey, colKey, value) =>
+          setData((prev) =>
+            prev.map((r) =>
+              String(r.id) === rowKey ? { ...r, [colKey]: value } : r)),
+        icon: <EditIcon />,
+        // renderCell에 함수 참조 전달 (인라인보다 깔끔)
+        renderCell: renderEditCellUI,
+      }}
+    />
+  )
+}`;
+
 async function highlight(code: string) {
   return codeToHtml(code, { lang: "tsx", theme: "one-dark-pro" });
 }
@@ -155,10 +453,14 @@ const TOC_GROUPS: TocGroup[] = [
 ];
 
 export default async function ReactTablePage() {
-  const [basicHtml, singleSortHtml, multiSortHtml] = await Promise.all([
+  const [basicHtml, singleSortHtml, multiSortHtml, selectionHtml, filterHtml, rowActionsHtml, editingHtml] = await Promise.all([
     highlight(BASIC_CODE),
     highlight(SINGLE_SORT_CODE),
     highlight(MULTI_SORT_CODE),
+    highlight(SELECTION_CODE),
+    highlight(FILTER_CODE),
+    highlight(ROW_ACTIONS_CODE),
+    highlight(EDITING_CODE),
   ]);
   return (
     <>
@@ -223,20 +525,10 @@ export default async function ReactTablePage() {
               </div>
               <h2 className="text-2xl font-bold text-on-surface">체크박스 선택</h2>
             </div>
-            <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-              <code>{`const [selectedKeys, setSelectedKeys] = useState<string[]>([])
-
-<Table
-  columns={columns}
-  data={data}
-  rowKey={(row) => String(row.id)}
-  selection={{
-    enabled: true,
-    keys: selectedKeys,
-    onChange: setSelectedKeys,
-  }}
-/>`}</code>
-            </pre>
+            <p className="mb-6 leading-relaxed text-on-surface-variant">
+              <code>selection</code> 옵션으로 체크박스 행 선택을 활성화합니다. 헤더의 체크박스로 전체 선택/해제가 가능합니다.
+            </p>
+            <SelectionDemo codeHtml={selectionHtml} />
           </section>
 
           <section className="mb-16" id="react-table-filter">
@@ -249,34 +541,7 @@ export default async function ReactTablePage() {
             <p className="mb-6 leading-relaxed text-on-surface-variant">
               컬럼 단위 필터를 제공합니다. <code>filterType</code>으로 텍스트, 셀렉트, 날짜 범위, 숫자 범위 필터를 선택할 수 있습니다.
             </p>
-            <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-              <code>{`const [filterValues, setFilterValues] = useState<Record<string, string>>({})
-
-const columns: ColumnDef<User>[] = [
-  { key: 'name', label: '이름', render: (row) => row.name, filterType: 'text' },
-  {
-    key: 'role', label: '역할', render: (row) => row.role,
-    filterType: 'select',
-    filterOptions: [
-      { label: '관리자', value: 'admin' },
-      { label: '사용자', value: 'user' },
-    ],
-  },
-]
-
-<Table
-  columns={columns}
-  data={data}
-  rowKey={(row) => String(row.id)}
-  filter={{
-    enabled: true,
-    values: filterValues,
-    onChange: (colKey, value) =>
-      setFilterValues((prev) => ({ ...prev, [colKey]: value })),
-    debounce: 300,
-  }}
-/>`}</code>
-            </pre>
+            <FilterDemo codeHtml={filterHtml} />
           </section>
 
           <section className="mb-16" id="react-table-row-actions">
@@ -286,22 +551,18 @@ const columns: ColumnDef<User>[] = [
               </div>
               <h2 className="text-2xl font-bold text-on-surface">행 삭제 / 추가</h2>
             </div>
-            <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-              <code>{`<Table
-  columns={columns}
-  data={data}
-  rowKey={(row) => String(row.id)}
-  rowActions={{
-    deletable: true,
-    onDelete: (rowKey) => console.log('삭제:', rowKey),
-    deleteIcon: <TrashIcon />,
-    adding: true,
-    onAdd: (values) => console.log('추가:', values),
-    onAddCancel: () => console.log('추가 취소'),
-    addIcon: <PlusIcon />,
-  }}
-/>`}</code>
-            </pre>
+            <div className="mb-6 space-y-2 leading-relaxed text-on-surface-variant">
+              <p>
+                <code>rowActions</code> 옵션으로 행 삭제/추가를 지원합니다.
+              </p>
+              <ul className="list-disc space-y-1 pl-5 text-sm">
+                <li><code>deletable: true</code> — 각 행에 삭제 버튼 표시</li>
+                <li><code>adding: true</code> + 컬럼의 <code>insertable: true</code> — 입력 필드가 자동 렌더링</li>
+                <li><code>selection</code>과 조합하면 체크박스 선택 후 일괄 삭제 가능</li>
+                <li><code>classNames</code>의 <code>addRow</code> · <code>addInput</code> · <code>addConfirmBtn</code> · <code>addCancelBtn</code>으로 추가 행 스타일 커스터마이징</li>
+              </ul>
+            </div>
+            <RowActionsDemo codeHtml={rowActionsHtml} />
           </section>
 
           <section className="mb-16" id="react-table-editing">
@@ -311,47 +572,18 @@ const columns: ColumnDef<User>[] = [
               </div>
               <h2 className="text-2xl font-bold text-on-surface">인라인 편집</h2>
             </div>
-            <p className="mb-6 leading-relaxed text-on-surface-variant">
-              셀 단위 인라인 편집을 지원합니다. 커스텀 편집 셀은 <code>ColumnDef</code>의 <code>renderEditCell</code>로 설정합니다.
-            </p>
-            <div className="space-y-6">
-              <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-                <code>{`<Table
-  columns={columns}
-  data={data}
-  rowKey={(row) => String(row.id)}
-  editing={{
-    onCellChange: (rowKey, colKey, value) =>
-      console.log('변경:', rowKey, colKey, value),
-    icon: <EditIcon />,
-    onValidationError: (error, rowKey, colKey) =>
-      console.error('검증 오류:', error, rowKey, colKey),
-  }}
-/>`}</code>
-              </pre>
-              <div>
-                <p className="mb-3 font-medium text-on-surface">커스텀 편집 셀</p>
-                <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-                  <code>{`const columns: ColumnDef<User>[] = [
-  {
-    key: 'name',
-    label: '이름',
-    render: (row) => row.name,
-    editable: true,
-    validate: (value) => value.trim() ? null : '이름은 필수입니다.',
-    renderEditCell: ({ value, onChange, onSave, onCancel, error }) => (
-      <input
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onBlur={onSave}
-        onKeyDown={(e) => e.key === 'Escape' && onCancel()}
-      />
-    ),
-  },
-]`}</code>
-                </pre>
-              </div>
+            <div className="mb-6 space-y-2 leading-relaxed text-on-surface-variant">
+              <p>
+                <code>editable: true</code>인 컬럼의 셀을 클릭하면 인라인 편집 모드로 전환됩니다.
+              </p>
+              <ul className="list-disc space-y-1 pl-5 text-sm">
+                <li><code>validate</code> — 저장 전 유효성 검증, 실패 시 <code>error</code> props로 메시지 전달</li>
+                <li><code>onCellChange</code> — 편집 완료(Enter / blur) 시 변경된 값 수신</li>
+                <li><code>editing.renderCell</code> — 모든 editable 컬럼에 공통 적용되는 편집 UI</li>
+                <li><code>renderEditCell</code> — 특정 컬럼만 개별 편집 UI 지정 (<code>renderCell</code>보다 우선)</li>
+              </ul>
             </div>
+            <EditingDemo codeHtml={editingHtml} />
           </section>
 
           <section className="mb-16" id="react-table-loading">
