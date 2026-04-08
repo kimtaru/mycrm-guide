@@ -8,6 +8,8 @@ import SelectionDemo from "./selection-demo";
 import FilterDemo from "./filter-demo";
 import RowActionsDemo from "./row-actions-demo";
 import EditingDemo from "./editing-demo";
+import LoadingDemo from "./loading-demo";
+import VirtualScrollDemo from "./virtual-scroll-demo";
 
 const BASIC_CODE = `import { Table } from '@mycrm-ui/react-table'
 import type { ColumnDef } from '@mycrm-ui/react-table'
@@ -242,7 +244,7 @@ export default function FilterExample() {
   )
 }`;
 
-const ROW_ACTIONS_CODE = `import { useState } from 'react'
+const ROW_ACTIONS_CODE = `import { useMemo, useState } from 'react'
 import { Table } from '@mycrm-ui/react-table'
 import type { ColumnDef } from '@mycrm-ui/react-table'
 
@@ -253,29 +255,98 @@ interface User {
   role: string
 }
 
+const ROLES = ['관리자', '편집자', '사용자']
+
 const initialData: User[] = [
   { id: 1, name: '홍길동', email: 'hong@example.com', role: '관리자' },
   { id: 2, name: '김철수', email: 'kim@example.com', role: '사용자' },
   { id: 3, name: '이영희', email: 'lee@example.com', role: '사용자' },
 ]
 
-// insertable: true인 컬럼에 추가 행의 input이 자동 렌더링됨
-const columns: ColumnDef<User>[] = [
-  { key: 'name', label: '이름', insertable: true, render: (row) => row.name },
-  { key: 'email', label: '이메일', insertable: true, render: (row) => row.email },
-  { key: 'role', label: '역할', insertable: true, render: (row) => row.role },
-]
+function FieldError({ message }: { message?: string }) {
+  if (!message) return null
+  return <p style={{ color: 'red', fontSize: 11, marginTop: 2 }}>{message}</p>
+}
 
 export default function RowActionsExample() {
   const [data, setData] = useState<User[]>(initialData)
   const [nextId, setNextId] = useState(4)
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
   const [isAdding, setIsAdding] = useState(false)
+  const [addErrors, setAddErrors] = useState<Record<string, string>>({})
+
+  // 에러 상태를 renderInsertCell에서 참조하기 위해 useMemo로 정의
+  const columns = useMemo<ColumnDef<User>[]>(() => [
+    {
+      key: 'name',
+      label: '이름',
+      insertable: true,
+      render: (row) => row.name,
+      renderInsertCell: ({ value, onChange, onConfirm }) => (
+        <div>
+          <input
+            placeholder="이름"
+            value={value}
+            onChange={(e) => {
+              onChange(e.target.value)
+              if (addErrors.name) setAddErrors((prev) => ({ ...prev, name: '' }))
+            }}
+            onKeyDown={(e) => { if (e.key === 'Enter') onConfirm() }}
+            style={{ borderColor: addErrors.name ? 'red' : undefined }}
+          />
+          <FieldError message={addErrors.name} />
+        </div>
+      ),
+    },
+    {
+      key: 'email',
+      label: '이메일',
+      insertable: true,
+      render: (row) => row.email,
+      renderInsertCell: ({ value, onChange, onConfirm }) => (
+        <div>
+          <input
+            placeholder="이메일"
+            value={value}
+            onChange={(e) => {
+              onChange(e.target.value)
+              if (addErrors.email) setAddErrors((prev) => ({ ...prev, email: '' }))
+            }}
+            onKeyDown={(e) => { if (e.key === 'Enter') onConfirm() }}
+            style={{ borderColor: addErrors.email ? 'red' : undefined }}
+          />
+          <FieldError message={addErrors.email} />
+        </div>
+      ),
+    },
+    {
+      key: 'role',
+      label: '역할',
+      insertable: true,
+      render: (row) => row.role,
+      renderInsertCell: ({ value, onChange }) => (
+        <div>
+          <select
+            value={value}
+            onChange={(e) => {
+              onChange(e.target.value)
+              if (addErrors.role) setAddErrors((prev) => ({ ...prev, role: '' }))
+            }}
+            style={{ borderColor: addErrors.role ? 'red' : undefined }}
+          >
+            <option value="" disabled>역할 선택</option>
+            {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
+          </select>
+          <FieldError message={addErrors.role} />
+        </div>
+      ),
+    },
+  ], [addErrors])
 
   return (
     <>
-      <div className="flex justify-end gap-2 mb-4">
-        <button onClick={() => setIsAdding(true)}>추가</button>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 16 }}>
+        <button onClick={() => setIsAdding(true)} disabled={isAdding}>추가</button>
         <button
           onClick={() => {
             setData((prev) =>
@@ -298,22 +369,38 @@ export default function RowActionsExample() {
           onChange: setSelectedKeys,
         }}
         rowActions={{
-          // 개별 행 삭제
           deletable: true,
           onDelete: (rowKey) =>
             setData((prev) => prev.filter((r) => String(r.id) !== rowKey)),
-          deleteIcon: <TrashIcon />,
-          // 행 추가 (insertable 컬럼에 input 자동 렌더링)
           adding: isAdding,
           onAdd: (values) => {
-            setData((prev) => [...prev, { id: nextId, ...values } as User])
+            const errors: Record<string, string> = {}
+            if (!values.name?.trim()) errors.name = '이름을 입력해주세요.'
+            if (!values.email?.trim()) {
+              errors.email = '이메일을 입력해주세요.'
+            } else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(values.email)) {
+              errors.email = '올바른 이메일 형식을 입력해주세요.'
+            }
+            if (!values.role) errors.role = '역할을 선택해주세요.'
+
+            if (Object.keys(errors).length > 0) {
+              setAddErrors(errors)
+              return
+            }
+
+            setAddErrors({})
+            setData((prev) => [
+              ...prev,
+              { id: nextId, name: values.name, email: values.email, role: values.role },
+            ])
             setNextId((n) => n + 1)
             setIsAdding(false)
           },
-          onAddCancel: () => setIsAdding(false),
+          onAddCancel: () => {
+            setAddErrors({})
+            setIsAdding(false)
+          },
         }}
-        // classNames.addRow / addInput / addConfirmBtn / addCancelBtn으로
-        // 추가 행 스타일링 가능
       />
     </>
   )
@@ -420,6 +507,137 @@ export default function EditingExample() {
   )
 }`;
 
+const LOADING_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef } from '@mycrm-ui/react-table'
+
+interface User {
+  id: number
+  name: string
+  email: string
+  role: string
+}
+
+const data: User[] = [
+  { id: 1, name: '홍길동', email: 'hong@example.com', role: '관리자' },
+  { id: 2, name: '김철수', email: 'kim@example.com', role: '사용자' },
+]
+
+const columns: ColumnDef<User>[] = [
+  { key: 'name', label: '이름', render: (row) => row.name },
+  { key: 'email', label: '이메일', render: (row) => row.email },
+  { key: 'role', label: '역할', render: (row) => row.role },
+]
+
+export default function LoadingExample() {
+  const [isLoading, setIsLoading] = useState(false)
+  const [isEmpty, setIsEmpty] = useState(false)
+
+  const handleLoad = () => {
+    setIsLoading(true)
+    setTimeout(() => setIsLoading(false), 2000)
+  }
+
+  return (
+    <Table
+      columns={columns}
+      data={isEmpty ? [] : data}
+      rowKey={(row) => String(row.id)}
+      loading={{
+        // enabled: true → 스켈레톤 행 표시
+        enabled: isLoading,
+        // rowCount: 스켈레톤 행 개수 (기본값 3)
+        rowCount: 5,
+        // renderEmpty: 데이터가 없을 때 렌더링 — <tr>/<td>로 반환해야 함
+        renderEmpty: () => (
+          <tr>
+            <td colSpan={3} style={{ textAlign: 'center', padding: '48px 0', color: '#888' }}>
+              데이터가 없습니다.
+            </td>
+          </tr>
+        ),
+        // render: 커스텀 스켈레톤 UI (생략 시 기본 shimmer 스켈레톤 사용)
+        // render: () => <CustomSkeleton />,
+      }}
+    />
+  )
+}`;
+
+const VIRTUAL_SCROLL_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef } from '@mycrm-ui/react-table'
+
+interface Item {
+  id: number
+  name: string
+  email: string
+  department: string
+}
+
+const columns: ColumnDef<Item>[] = [
+  { key: 'name', label: '이름', render: (row) => row.name },
+  { key: 'email', label: '이메일', render: (row) => row.email },
+  { key: 'department', label: '부서', render: (row) => row.department },
+]
+
+export default function VirtualScrollExample() {
+  const [data, setData] = useState<Item[]>(generateItems(50))
+  const [hasMore, setHasMore] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+
+  const handleLoadMore = () => {
+    if (loadingMore || !hasMore) return
+    setLoadingMore(true)
+    setTimeout(() => {
+      setData((prev) => {
+        const next = [...prev, ...generateItems(50, prev.length + 1)]
+        setHasMore(next.length < 300)
+        setLoadingMore(false)
+        return next
+      })
+    }, 600)
+  }
+
+  return (
+    <Table
+      columns={columns}
+      data={data}
+      rowKey={(row) => String(row.id)}
+      scroll={{
+        // virtual: true → DOM에 보이는 행만 렌더링 (대용량 최적화)
+        virtual: true,
+        // rowHeight: 각 행의 고정 높이(px) — 가상 스크롤에 필수
+        rowHeight: 48,
+        // overscan: 뷰포트 밖 추가 렌더링 행 수 (기본값 5)
+        overscan: 5,
+        // stickyHeader: 스크롤 시 헤더 고정
+        stickyHeader: true,
+        // onLoadMore: 끝에 도달하면 호출 (무한 스크롤)
+        onLoadMore: handleLoadMore,
+        // hasMore: 추가 데이터 존재 여부
+        hasMore,
+        // loadingMore: 로딩 중 여부 (로딩 행 표시 + 중복 호출 방지)
+        loadingMore,
+        // renderLoadingMore: 로딩 중 표시할 커스텀 UI
+        renderLoadingMore: () => (
+          <div style={{ textAlign: 'center', padding: '8px', color: '#888', fontSize: '12px' }}>
+            로딩 중...
+          </div>
+        ),
+      }}
+      classNames={{
+        // wrap에 고정 높이 + overflow-y: auto 또는 scroll 필수
+        wrap: 'h-[380px] overflow-y-auto',
+        table: 'w-full text-sm',
+        thead: 'bg-surface-container-low',
+        th: 'px-4 py-3 text-left font-semibold',
+        tr: 'border-t border-outline-variant/20',
+        td: 'px-4 py-3',
+      }}
+    />
+  )
+}`;
+
 async function highlight(code: string) {
   return codeToHtml(code, { lang: "tsx", theme: "one-dark-pro" });
 }
@@ -453,7 +671,7 @@ const TOC_GROUPS: TocGroup[] = [
 ];
 
 export default async function ReactTablePage() {
-  const [basicHtml, singleSortHtml, multiSortHtml, selectionHtml, filterHtml, rowActionsHtml, editingHtml] = await Promise.all([
+  const [basicHtml, singleSortHtml, multiSortHtml, selectionHtml, filterHtml, rowActionsHtml, editingHtml, loadingHtml, virtualScrollHtml] = await Promise.all([
     highlight(BASIC_CODE),
     highlight(SINGLE_SORT_CODE),
     highlight(MULTI_SORT_CODE),
@@ -461,6 +679,8 @@ export default async function ReactTablePage() {
     highlight(FILTER_CODE),
     highlight(ROW_ACTIONS_CODE),
     highlight(EDITING_CODE),
+    highlight(LOADING_CODE),
+    highlight(VIRTUAL_SCROLL_CODE),
   ]);
   return (
     <>
@@ -593,20 +813,17 @@ export default async function ReactTablePage() {
               </div>
               <h2 className="text-2xl font-bold text-on-surface">로딩 / 빈 상태</h2>
             </div>
-            <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-              <code>{`<Table
-  columns={columns}
-  data={data}
-  rowKey={(row) => String(row.id)}
-  loading={{
-    enabled: isLoading,
-    rowCount: 5,
-    emptyText: '데이터가 없습니다.',
-    renderEmpty: () => <EmptyState />,
-    render: () => <CustomSkeleton />,
-  }}
-/>`}</code>
-            </pre>
+            <div className="mb-6 space-y-2 leading-relaxed text-on-surface-variant">
+              <p>
+                <code>loading.enabled</code>가 <code>true</code>이면 데이터 대신 shimmer 스켈레톤 행을 렌더링합니다.
+              </p>
+              <ul className="list-disc space-y-1 pl-5 text-sm">
+                <li><code>rowCount</code> — 스켈레톤 행 개수 (기본값 3)</li>
+                <li><code>render</code> — 커스텀 스켈레톤 UI (생략 시 기본 shimmer 사용)</li>
+                <li><code>renderEmpty</code> — 데이터가 없을 때 렌더링할 컴포넌트</li>
+              </ul>
+            </div>
+            <LoadingDemo codeHtml={loadingHtml} />
           </section>
 
           <section className="mb-16" id="react-table-virtual-scroll">
@@ -616,25 +833,17 @@ export default async function ReactTablePage() {
               </div>
               <h2 className="text-2xl font-bold text-on-surface">가상 스크롤</h2>
             </div>
-            <p className="mb-6 leading-relaxed text-on-surface-variant">대용량 데이터를 위한 가상 스크롤과 무한 로딩을 지원합니다.</p>
-            <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-              <code>{`<Table
-  columns={columns}
-  data={largeData}
-  rowKey={(row) => String(row.id)}
-  scroll={{
-    virtual: true,
-    rowHeight: 48,
-    overscan: 5,
-    stickyHeader: true,
-    onLoadMore: fetchNextPage,
-    hasMore: true,
-    loadingMore: isFetchingNextPage,
-    renderLoadingMore: () => <Spinner />,
-    threshold: 200,
-  }}
-/>`}</code>
-            </pre>
+            <p className="mb-4 leading-relaxed text-on-surface-variant">대용량 데이터를 위한 가상 스크롤과 무한 로딩을 지원합니다.</p>
+            <div className="mb-6 rounded-xl border border-outline-variant/20 bg-surface-container-low/40 px-5 py-4 text-sm text-on-surface-variant">
+              <ul className="space-y-1.5 list-disc list-inside">
+                <li><code>scroll.virtual</code> — 가상 스크롤 활성화 (DOM에 보이는 행만 렌더링)</li>
+                <li><code>scroll.rowHeight</code> — 행 높이(px), 가상 스크롤 사용 시 필수</li>
+                <li><code>scroll.stickyHeader</code> — 스크롤 시 헤더 고정</li>
+                <li><code>scroll.onLoadMore</code> — 끝에 도달하면 호출되는 무한 스크롤 콜백</li>
+                <li><code>classNames.wrap</code> — 고정 높이 + <code>overflow-y: auto</code> 또는 <code>overflow-y: scroll</code> 설정 필수</li>
+              </ul>
+            </div>
+            <VirtualScrollDemo codeHtml={virtualScrollHtml} />
           </section>
 
           <section className="mb-16" id="react-table-column-manager">
