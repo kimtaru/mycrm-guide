@@ -10,6 +10,8 @@ import RowActionsDemo from "./row-actions-demo";
 import EditingDemo from "./editing-demo";
 import LoadingDemo from "./loading-demo";
 import VirtualScrollDemo from "./virtual-scroll-demo";
+import ColumnManagerDemo from "./column-manager-demo";
+import ExpandDemo from "./expand-demo";
 
 const BASIC_CODE = `import { Table } from '@mycrm-ui/react-table'
 import type { ColumnDef } from '@mycrm-ui/react-table'
@@ -638,6 +640,204 @@ export default function VirtualScrollExample() {
   )
 }`;
 
+const COLUMN_MANAGER_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef } from '@mycrm-ui/react-table'
+
+interface Employee {
+  id: number
+  name: string
+  email: string
+  department: string
+  role: string
+  joinDate: string
+}
+
+const columns: ColumnDef<Employee>[] = [
+  { key: 'name', label: '이름', width: '120px', render: (row) => row.name },
+  { key: 'email', label: '이메일', width: '200px', render: (row) => row.email },
+  { key: 'department', label: '부서', width: '100px', render: (row) => row.department },
+  { key: 'role', label: '직책', width: '100px', render: (row) => row.role },
+  { key: 'joinDate', label: '입사일', width: '120px', render: (row) => row.joinDate },
+]
+
+export default function ColumnManagerExample() {
+  // 숨김 컬럼 키 배열
+  const [hiddenKeys, setHiddenKeys] = useState<string[]>([])
+  // 컬럼 순서 (빈 배열이면 기본 순서)
+  const [order, setOrder] = useState<string[]>([])
+  // 고정(pin) 컬럼 — left/right 각각 키 배열
+  const [pinned, setPinned] = useState<{ left?: string[]; right?: string[] }>({})
+  // 리사이즈된 컬럼 너비
+  const [widths, setWidths] = useState<Record<string, number>>({})
+
+  return (
+    <Table
+      columns={columns}
+      data={data}
+      rowKey={(row) => String(row.id)}
+      // columnManager를 설정하면 헤더 메뉴에 "컬럼 관리" 항목이 자동 추가됨
+      columnManager={{
+        hiddenKeys,
+        onHiddenKeysChange: setHiddenKeys,
+        order,
+        onOrderChange: setOrder,
+        pinned,
+        onPinnedChange: setPinned,
+        resizable: true,
+        widths,
+        onWidthChange: (colKey, width) =>
+          setWidths((prev) => ({ ...prev, [colKey]: width })),
+        pinnedBg: { header: '#f0f0f0', body: '#ffffff' },
+      }}
+      // 헤더 메뉴 아이콘 — 클릭 시 드롭다운이 열리고,
+      // columnManager가 설정되어 있으면 "컬럼 관리" 버튼이 자동 포함됨
+      headerMenuIcon={
+        <span className="material-symbols-outlined text-[14px]">more_horiz</span>
+      }
+      // 헤더 메뉴 드롭다운 및 컬럼 관리 모달 스타일링
+      classNames={{
+        // 헤더 메뉴 (⋯ 버튼 → 드롭다운)
+        headerMenuBtn: 'header-menu-btn',
+        headerMenuDropdown: 'header-menu-dropdown',
+        headerMenuItem: 'header-menu-item',
+        // 컬럼 관리 모달
+        columnManagerBackdrop: 'column-manager-backdrop',
+        columnManager: 'column-manager',
+        columnManagerHeader: 'column-manager-header',
+        columnManagerTitle: 'column-manager-title',
+        columnManagerCloseBtn: 'column-manager-close-btn',
+        columnManagerSelectAllBtn: 'column-manager-select-all-btn',
+        columnManagerDeselectAllBtn: 'column-manager-deselect-all-btn',
+        columnManagerBody: 'column-manager-body',
+        // 컬럼 토글 항목 (체크박스 + 드래그 순서 변경)
+        columnToggle: 'column-toggle',
+        columnToggleActive: 'column-toggle-active',
+        columnToggleCheckbox: 'column-toggle-checkbox',
+      }}
+    />
+  )
+}`;
+
+const EXPAND_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef, ExpandDef } from '@mycrm-ui/react-table'
+
+// 리프 행
+interface Member {
+  id: number
+  name: string
+  role: string
+  email: string
+}
+
+// 2단계 그룹
+interface Team {
+  name: string
+  members: Member[]
+}
+
+// 1단계 그룹
+interface Department {
+  name: string
+  teams: Team[]
+}
+
+// 리프 행에 표시할 컬럼
+const memberColumns: ColumnDef<Member>[] = [
+  { key: 'name', label: '이름', width: '120px', render: (m) => m.name },
+  { key: 'role', label: '직책', width: '100px', render: (m) => m.role },
+  { key: 'email', label: '이메일', width: '200px', render: (m) => m.email },
+]
+
+// 2단계: 팀 → 멤버
+const teamExpandDef: ExpandDef<Team, Member> = {
+  children: (team) => team.members,
+  childRowKey: (m) => String(m.id),
+  childColumns: memberColumns,
+  renderGroupLabel: (team) => (
+    <><strong>{team.name}</strong> ({team.members.length}명)</>
+  ),
+}
+
+// 1단계: 부서 → 팀 (childExpandDef로 다단계 연결)
+const deptExpandDef: ExpandDef<Department, Team> = {
+  children: (dept) => dept.teams,
+  childRowKey: (team) => team.name,
+  childColumns: [] as ColumnDef<Team>[],   // 팀은 그룹 행이므로 컬럼 불필요
+  renderGroupLabel: (dept) => (
+    <><strong>{dept.name}</strong> ({dept.teams.length}팀)</>
+  ),
+  childExpandDef: teamExpandDef,           // 재귀 연결
+}
+
+const departments: Department[] = [
+  {
+    name: '개발본부',
+    teams: [
+      {
+        name: '프론트엔드',
+        members: [
+          { id: 1, name: '홍길동', role: '팀장', email: 'hong@example.com' },
+          { id: 2, name: '김철수', role: '시니어', email: 'kim@example.com' },
+          { id: 3, name: '박영희', role: '주니어', email: 'park@example.com' },
+        ],
+      },
+      {
+        name: '백엔드',
+        members: [
+          { id: 4, name: '이민호', role: '팀장', email: 'lee@example.com' },
+          { id: 5, name: '최지은', role: '시니어', email: 'choi@example.com' },
+        ],
+      },
+    ],
+  },
+  {
+    name: '디자인본부',
+    teams: [
+      {
+        name: 'UX',
+        members: [
+          { id: 6, name: '정수민', role: '팀장', email: 'jung@example.com' },
+          { id: 7, name: '한예린', role: '시니어', email: 'han@example.com' },
+        ],
+      },
+    ],
+  },
+]
+
+export default function ExpandExample() {
+  const [expandedKeys, setExpandedKeys] = useState<string[]>([])
+  const [selectedChildKeys, setSelectedChildKeys] = useState<string[]>([])
+
+  return (
+    <Table<Department>
+      columns={[] as ColumnDef<Department>[]}
+      data={departments}
+      rowKey={(dept) => dept.name}
+      expand={{
+        def: deptExpandDef,
+        keys: expandedKeys,
+        onKeysChange: setExpandedKeys,
+        icon: {
+          expanded: <ChevronDownIcon />,
+          collapsed: <ChevronRightIcon />,
+        },
+        // 리프 행 체크박스 선택
+        childSelection: {
+          enabled: true,
+          keys: selectedChildKeys,
+          onChange: setSelectedChildKeys,
+        },
+        // 리프 행 삭제 버튼
+        childDeletable: true,
+        onChildDelete: (groupKey, childKey) =>
+          console.log('삭제:', groupKey, childKey),
+      }}
+    />
+  )
+}`;
+
 async function highlight(code: string) {
   return codeToHtml(code, { lang: "tsx", theme: "one-dark-pro" });
 }
@@ -671,7 +871,7 @@ const TOC_GROUPS: TocGroup[] = [
 ];
 
 export default async function ReactTablePage() {
-  const [basicHtml, singleSortHtml, multiSortHtml, selectionHtml, filterHtml, rowActionsHtml, editingHtml, loadingHtml, virtualScrollHtml] = await Promise.all([
+  const [basicHtml, singleSortHtml, multiSortHtml, selectionHtml, filterHtml, rowActionsHtml, editingHtml, loadingHtml, virtualScrollHtml, columnManagerHtml, expandHtml] = await Promise.all([
     highlight(BASIC_CODE),
     highlight(SINGLE_SORT_CODE),
     highlight(MULTI_SORT_CODE),
@@ -681,6 +881,8 @@ export default async function ReactTablePage() {
     highlight(EDITING_CODE),
     highlight(LOADING_CODE),
     highlight(VIRTUAL_SCROLL_CODE),
+    highlight(COLUMN_MANAGER_CODE),
+    highlight(EXPAND_CODE),
   ]);
   return (
     <>
@@ -853,33 +1055,8 @@ export default async function ReactTablePage() {
               </div>
               <h2 className="text-2xl font-bold text-on-surface">컬럼 관리</h2>
             </div>
-            <p className="mb-6 leading-relaxed text-on-surface-variant">컬럼 숨김, 순서 변경, 고정(pin), 리사이즈를 지원합니다.</p>
-            <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-              <code>{`const [hiddenKeys, setHiddenKeys] = useState<string[]>([])
-const [order, setOrder] = useState<string[]>([])
-const [pinned, setPinned] = useState<{ left?: string[]; right?: string[] }>({})
-const [widths, setWidths] = useState<Record<string, number>>({})
-
-<Table
-  columns={columns}
-  data={data}
-  rowKey={(row) => String(row.id)}
-  columnManager={{
-    hiddenKeys,
-    onHiddenKeysChange: setHiddenKeys,
-    order,
-    onOrderChange: setOrder,
-    pinned,
-    onPinnedChange: setPinned,
-    resizable: true,
-    widths,
-    onWidthChange: (colKey, width) =>
-      setWidths((prev) => ({ ...prev, [colKey]: width })),
-    pinnedBg: { header: '#f0f0f0', body: '#ffffff' },
-    noHeaderMenu: false,
-  }}
-/>`}</code>
-            </pre>
+            <p className="mb-6 leading-relaxed text-on-surface-variant">컬럼 숨김, 순서 변경, 고정(pin), 리사이즈를 지원합니다. 헤더 메뉴에서 컬럼 관리 모달을 열고, 드래그로 순서를 변경할 수 있습니다.</p>
+            <ColumnManagerDemo codeHtml={columnManagerHtml} />
           </section>
 
           <section className="mb-16" id="react-table-expand">
@@ -891,56 +1068,9 @@ const [widths, setWidths] = useState<Record<string, number>>({})
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">
               <code>ExpandDef</code>로 그룹(부모)과 자식 행을 구분하여 계층형 테이블을 구성합니다.
+              자식 행 선택, 삭제, 아이콘 커스터마이징을 지원하며 <code>childExpandDef</code>로 다단계 중첩도 가능합니다.
             </p>
-            <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-              <code>{`import type { ExpandDef } from '@mycrm-ui/react-table'
-
-interface Order {
-  id: number
-  customer: string
-  items: OrderItem[]
-}
-interface OrderItem {
-  id: number
-  product: string
-  qty: number
-}
-
-const expandDef: ExpandDef<Order, OrderItem> = {
-  renderGroupLabel: (group) => <strong>{group.customer}</strong>,
-  children: (group) => group.items,
-  childRowKey: (item) => String(item.id),
-  childColumns: [
-    { key: 'product', label: '상품', render: (item) => item.product },
-    { key: 'qty', label: '수량', render: (item) => item.qty },
-  ],
-}
-
-const [expandedKeys, setExpandedKeys] = useState<string[]>([])
-
-<Table
-  columns={columns}
-  data={data}
-  rowKey={(row) => String(row.id)}
-  expand={{
-    def: expandDef,
-    keys: expandedKeys,
-    onKeysChange: setExpandedKeys,
-    icon: {
-      expanded: <ChevronDownIcon />,
-      collapsed: <ChevronRightIcon />,
-    },
-    childSelection: {
-      enabled: true,
-      keys: selectedChildKeys,
-      onChange: setSelectedChildKeys,
-    },
-    childDeletable: true,
-    onChildDelete: (groupKey, childKey) =>
-      console.log('자식 삭제:', groupKey, childKey),
-  }}
-/>`}</code>
-            </pre>
+            <ExpandDemo codeHtml={expandHtml} />
           </section>
 
           <section className="mb-16" id="react-table-row-events">
