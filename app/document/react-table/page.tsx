@@ -16,6 +16,7 @@ import RowEventsDemo from "./row-events-demo";
 import TooltipCopyDemo from "./tooltip-copy-demo";
 import HeaderMenuDemo from "./header-menu-demo";
 import CssCustomDemo from "./css-custom-demo";
+import CssClassnamesTable from "./css-classnames-table";
 
 const BASIC_CODE = `import { Table } from '@mycrm-ui/react-table'
 import type { ColumnDef } from '@mycrm-ui/react-table'
@@ -1310,225 +1311,7 @@ export default async function ReactTablePage() {
               <code>classNames</code> prop으로 모든 시각적 요소에 className 슬롯이 제공됩니다. 아래에서 테마를 선택해 차이를 확인하세요.
             </p>
             <CssCustomDemo />
-            <div className="mt-8 overflow-hidden rounded-xl border border-outline-variant/25 bg-surface-container-lowest">
-              <table className="w-full text-sm">
-                <thead className="bg-surface-container-low text-on-surface-variant">
-                  <tr>
-                    <th className="px-4 py-3 text-left font-semibold">슬롯</th>
-                    <th className="px-4 py-3 text-left font-semibold">적용 요소</th>
-                    <th className="px-4 py-3 text-left font-semibold">관련 기능</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* 기본 레이아웃 */}
-                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
-                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">기본 레이아웃</td>
-                  </tr>
-                  {[
-                    ["wrap", "테이블 최외곽 div", "스크롤 컨테이너 (height + overflow-y 설정)"],
-                    ["table", "<table>", "기본"],
-                    ["thead", "<thead>", "기본"],
-                    ["th", "<th> (헤더 셀)", "기본"],
-                    ["tbody", "<tbody>", "기본"],
-                    ["tr", "<tr> (데이터 행)", "기본"],
-                    ["td", "<td> (데이터 셀)", "기본"],
-                  ].map(([slot, el, desc]) => (
-                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
-                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
-                    </tr>
-                  ))}
-                  {/* 정렬 */}
-                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
-                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">정렬</td>
-                  </tr>
-                  {[
-                    ["sortPriority", "다중 정렬 우선순위 숫자", "정렬"],
-                  ].map(([slot, el, desc]) => (
-                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
-                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
-                    </tr>
-                  ))}
-                  {/* 체크박스 선택 */}
-                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
-                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">체크박스 선택</td>
-                  </tr>
-                  {[
-                    ["checkbox", "<input type='checkbox'>", "선택"],
-                    ["checkboxChecked", "체크된 상태의 체크박스", "선택"],
-                  ].map(([slot, el, desc]) => (
-                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
-                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
-                    </tr>
-                  ))}
-                  {/* 필터 */}
-                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
-                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">필터</td>
-                  </tr>
-                  {[
-                    ["filterRow", "필터 입력 행 <tr>", "필터"],
-                    ["filterCell", "필터 행의 <th>", "필터"],
-                    ["filterInput", "텍스트 / 날짜 / 숫자 범위 <input>", "필터"],
-                    ["filterSelect", "select 필터 <select>", "필터"],
-                  ].map(([slot, el, desc]) => (
-                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
-                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
-                    </tr>
-                  ))}
-                  {/* 인라인 편집 */}
-                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
-                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">인라인 편집</td>
-                  </tr>
-                  {[
-                    ["tdEditing", "편집 중인 <td>", "인라인 편집"],
-                    ["editError", "편집 에러 메시지", "인라인 편집"],
-                    ["tdFocused", "키보드 포커스된 <td>", "키보드 내비게이션"],
-                  ].map(([slot, el, desc]) => (
-                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
-                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
-                    </tr>
-                  ))}
-                  {/* 행 삭제 / 추가 */}
-                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
-                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">행 삭제 / 추가</td>
-                  </tr>
-                  {[
-                    ["addRow", "새 행 추가 <tr>", "행 추가"],
-                    ["addInput", "추가 행의 입력 필드", "행 추가"],
-                    ["addConfirmBtn", "추가 확인 버튼", "행 추가"],
-                    ["addCancelBtn", "추가 취소 버튼", "행 추가"],
-                  ].map(([slot, el, desc]) => (
-                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
-                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
-                    </tr>
-                  ))}
-                  {/* 헤더 메뉴 */}
-                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
-                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">헤더 메뉴</td>
-                  </tr>
-                  {[
-                    ["headerMenuBtn", "⋯ 버튼", "헤더 메뉴"],
-                    ["headerMenuDropdown", "드롭다운 컨테이너", "헤더 메뉴"],
-                    ["headerMenuItem", "드롭다운 각 항목 <button>", "헤더 메뉴"],
-                  ].map(([slot, el, desc]) => (
-                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
-                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
-                    </tr>
-                  ))}
-                  {/* 컬럼 관리 */}
-                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
-                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">컬럼 관리</td>
-                  </tr>
-                  {[
-                    ["columnManagerBackdrop", "모달 배경 오버레이", "컬럼 관리"],
-                    ["columnManager", "모달 컨테이너", "컬럼 관리"],
-                    ["columnManagerHeader", "모달 헤더", "컬럼 관리"],
-                    ["columnManagerTitle", "모달 제목", "컬럼 관리"],
-                    ["columnManagerSelectAllBtn", "전체 선택 버튼", "컬럼 관리"],
-                    ["columnManagerDeselectAllBtn", "전체 해제 버튼", "컬럼 관리"],
-                    ["columnManagerCloseBtn", "닫기 버튼", "컬럼 관리"],
-                    ["columnManagerBody", "모달 본문 (토글 목록 영역)", "컬럼 관리"],
-                    ["columnToggle", "컬럼 토글 항목", "컬럼 관리"],
-                    ["columnToggleActive", "표시 중인 컬럼 토글", "컬럼 관리"],
-                    ["columnToggleCheckbox", "토글 체크박스", "컬럼 관리"],
-                  ].map(([slot, el, desc]) => (
-                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
-                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
-                    </tr>
-                  ))}
-                  {/* 컬럼 리사이즈 / 드래그 / 핀 */}
-                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
-                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">컬럼 리사이즈 / 드래그 / 핀</td>
-                  </tr>
-                  {[
-                    ["resizeHandle", "리사이즈 핸들 div", "컬럼 리사이즈"],
-                    ["thDragging", "드래그 중인 <th>", "컬럼 드래그 순서 변경"],
-                    ["thDragOver", "드래그 오버된 <th>", "컬럼 드래그 순서 변경"],
-                    ["thPinnedLeft", "좌측 고정 <th>", "컬럼 핀"],
-                    ["thPinnedRight", "우측 고정 <th>", "컬럼 핀"],
-                    ["tdPinnedLeft", "좌측 고정 <td>", "컬럼 핀"],
-                    ["tdPinnedRight", "우측 고정 <td>", "컬럼 핀"],
-                  ].map(([slot, el, desc]) => (
-                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
-                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
-                    </tr>
-                  ))}
-                  {/* 컨텍스트 메뉴 */}
-                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
-                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">컨텍스트 메뉴 / 툴팁 / 복사</td>
-                  </tr>
-                  {[
-                    ["contextMenu", "헤더 우클릭 컨텍스트 메뉴", "컬럼 핀 컨텍스트 메뉴"],
-                    ["contextMenuItem", "컨텍스트 메뉴 항목", "컬럼 핀 컨텍스트 메뉴"],
-                    ["tooltip", "셀 호버 툴팁", "툴팁"],
-                    ["cellCopyMenu", "셀 우클릭 복사 메뉴", "복사"],
-                    ["cellCopyMenuItem", "복사 메뉴 항목", "복사"],
-                  ].map(([slot, el, desc]) => (
-                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
-                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
-                    </tr>
-                  ))}
-                  {/* 확장 행 */}
-                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
-                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">확장 행</td>
-                  </tr>
-                  {[
-                    ["groupRow", "그룹(부모) 행 <tr>", "확장 행"],
-                    ["groupCell", "그룹 행 <td>", "확장 행"],
-                    ["expandIcon", "펼치기 / 접기 아이콘", "확장 행"],
-                    ["childRow", "자식 행 <tr>", "확장 행"],
-                    ["childTd", "자식 행 <td>", "확장 행"],
-                    ["childIndent", "자식 행 들여쓰기 div", "확장 행"],
-                  ].map(([slot, el, desc]) => (
-                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
-                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
-                    </tr>
-                  ))}
-                  {/* 로딩 / 빈 상태 / 가상 스크롤 */}
-                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
-                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">로딩 / 빈 상태 / 가상 스크롤</td>
-                  </tr>
-                  {[
-                    ["skeletonRow", "스켈레톤 행 <tr>", "로딩"],
-                    ["skeletonCell", "스켈레톤 <td>", "로딩"],
-                    ["skeletonBar", "스켈레톤 바 (shimmer 애니메이션)", "로딩"],
-                    ["emptyRow", "빈 상태 행 <tr>", "빈 상태"],
-                    ["emptyCell", "빈 상태 <td>", "빈 상태"],
-                    ["loadMoreRow", "더 불러오기 행 <tr>", "가상 스크롤"],
-                    ["loadMoreCell", "더 불러오기 <td>", "가상 스크롤"],
-                    ["sentinelRow", "무한 스크롤 감지 행", "가상 스크롤"],
-                    ["virtualPadding", "가상 스크롤 상·하단 패딩 행", "가상 스크롤"],
-                  ].map(([slot, el, desc]) => (
-                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
-                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
-                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <CssClassnamesTable />
           </section>
 
           <section className="mb-16" id="column-def">
@@ -1609,6 +1392,16 @@ export default async function ReactTablePage() {
                     <td className="px-4 py-3 text-on-surface-variant">text | select | dateRange | numberRange</td>
                   </tr>
                   <tr className="border-t border-outline-variant/20">
+                    <td className="px-4 py-3 font-mono text-xs">filterOptions</td>
+                    <td className="px-4 py-3 font-mono text-xs">{"{ label: string; value: string }[]"}</td>
+                    <td className="px-4 py-3 text-on-surface-variant">select 필터의 선택지 목록</td>
+                  </tr>
+                  <tr className="border-t border-outline-variant/20">
+                    <td className="px-4 py-3 font-mono text-xs">filterPlaceholder</td>
+                    <td className="px-4 py-3 font-mono text-xs">string</td>
+                    <td className="px-4 py-3 text-on-surface-variant">text 필터 입력창 placeholder</td>
+                  </tr>
+                  <tr className="border-t border-outline-variant/20">
                     <td className="px-4 py-3 font-mono text-xs">editable</td>
                     <td className="px-4 py-3 font-mono text-xs">boolean</td>
                     <td className="px-4 py-3 text-on-surface-variant">인라인 편집 가능</td>
@@ -1636,7 +1429,17 @@ export default async function ReactTablePage() {
                   <tr className="border-t border-outline-variant/20">
                     <td className="px-4 py-3 font-mono text-xs">renderEditCell</td>
                     <td className="px-4 py-3 font-mono text-xs">(props) =&gt; ReactNode</td>
-                    <td className="px-4 py-3 text-on-surface-variant">커스텀 편집 셀 렌더러</td>
+                    <td className="px-4 py-3 text-on-surface-variant">커스텀 편집 셀 렌더러 (editing.renderCell보다 우선)</td>
+                  </tr>
+                  <tr className="border-t border-outline-variant/20">
+                    <td className="px-4 py-3 font-mono text-xs">renderInsertCell</td>
+                    <td className="px-4 py-3 font-mono text-xs">(props) =&gt; ReactNode</td>
+                    <td className="px-4 py-3 text-on-surface-variant">행 추가 시 커스텀 입력 셀 렌더러</td>
+                  </tr>
+                  <tr className="border-t border-outline-variant/20">
+                    <td className="px-4 py-3 font-mono text-xs">onValidationError</td>
+                    <td className="px-4 py-3 font-mono text-xs">(error: string) =&gt; void</td>
+                    <td className="px-4 py-3 text-on-surface-variant">검증 실패 시 콜백 — 설정 시 renderCell의 error props가 null이 됨</td>
                   </tr>
                 </tbody>
               </table>
