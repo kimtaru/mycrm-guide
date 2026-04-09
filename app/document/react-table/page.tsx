@@ -12,6 +12,10 @@ import LoadingDemo from "./loading-demo";
 import VirtualScrollDemo from "./virtual-scroll-demo";
 import ColumnManagerDemo from "./column-manager-demo";
 import ExpandDemo from "./expand-demo";
+import RowEventsDemo from "./row-events-demo";
+import TooltipCopyDemo from "./tooltip-copy-demo";
+import HeaderMenuDemo from "./header-menu-demo";
+import CssCustomDemo from "./css-custom-demo";
 
 const BASIC_CODE = `import { Table } from '@mycrm-ui/react-table'
 import type { ColumnDef } from '@mycrm-ui/react-table'
@@ -838,6 +842,186 @@ export default function ExpandExample() {
   )
 }`;
 
+const ROW_EVENTS_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef } from '@mycrm-ui/react-table'
+
+interface Employee {
+  id: number
+  name: string
+  department: string
+  role: string
+}
+
+const columns: ColumnDef<Employee>[] = [
+  { key: 'name', label: '이름', width: '130px', render: (row) => row.name },
+  { key: 'department', label: '부서', width: '120px', render: (row) => row.department },
+  // editable: true — 포커스 후 Enter 키로 편집 시작
+  { key: 'role', label: '직책', width: '140px', editable: true, render: (row) => row.role },
+]
+
+const data: Employee[] = [
+  { id: 1, name: '홍길동', department: '개발', role: '팀장' },
+  { id: 2, name: '김철수', department: '개발', role: '시니어' },
+  { id: 3, name: '이영희', department: '디자인', role: '팀장' },
+]
+
+export default function RowEventsExample() {
+  const [data, setData] = useState(initialData)
+  const [focusedCell, setFocusedCell] = useState<{ rowKey: string; colKey: string } | null>(null)
+
+  return (
+    <Table<Employee>
+      columns={columns}
+      data={data}
+      rowKey={(row) => String(row.id)}
+      // 행 단일 클릭 핸들러
+      onRowClick={(row, rowKey, event) => console.log('클릭:', row.name)}
+      // 행 더블클릭 핸들러
+      onRowDoubleClick={(row, rowKey, event) => console.log('더블클릭:', row.name)}
+      // 조건부 행 CSS 클래스
+      rowClassName={(row) => row.role === '팀장' ? 'font-semibold' : undefined}
+      // ↑↓ 키보드 내비게이션 활성화
+      keyboardNavigation={true}
+      // 포커스된 셀 변경 콜백
+      onFocusedCellChange={(cell) => setFocusedCell(cell)}
+      // Enter 키로 편집 — renderCell로 저장/취소 UI 커스터마이징
+      editing={{
+        onCellChange: (rowKey, colKey, value) => {
+          setData((prev) =>
+            prev.map((r) => String(r.id) === rowKey ? { ...r, [colKey]: value } : r)
+          )
+        },
+        renderCell: ({ value, onChange, onSave, onCancel }) => (
+          <div className="flex items-center gap-1.5">
+            <input
+              className="rounded border px-2 py-1 text-sm"
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') onSave(); if (e.key === 'Escape') onCancel() }}
+              autoFocus
+            />
+            <button onClick={onSave}>✓</button>
+            <button onClick={onCancel}>✗</button>
+          </div>
+        ),
+      }}
+    />
+  )
+}`;
+
+const TOOLTIP_COPY_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef } from '@mycrm-ui/react-table'
+
+interface Product {
+  id: number
+  name: string
+  sku: string
+  category: string
+  price: string
+}
+
+const columns: ColumnDef<Product>[] = [
+  {
+    key: 'name', label: '상품명', width: '200px',
+    // copyable: true — 우클릭 시 복사 메뉴 표시
+    copyable: true,
+    render: (row) => row.name,
+  },
+  { key: 'sku', label: 'SKU', width: '160px', copyable: true, render: (row) => row.sku },
+  { key: 'category', label: '카테고리', width: '110px', render: (row) => row.category },
+  { key: 'price', label: '가격', width: '120px', copyable: true, render: (row) => row.price },
+]
+
+const data: Product[] = [
+  { id: 1, name: 'MacBook Pro 14인치 M3 Pro 칩 36GB RAM 512GB SSD', sku: 'MBP-14-M3PRO-36-512', category: '노트북', price: '2,990,000원' },
+  { id: 2, name: 'iPhone 15 Pro Max 256GB 티타늄 내추럴', sku: 'IPH-15PROMAX-256-NT', category: '스마트폰', price: '1,890,000원' },
+  { id: 3, name: 'iPad Air M2 256GB Wi-Fi + Cellular 스타라이트', sku: 'IPA-M2-256-CELL-SL', category: '태블릿', price: '1,149,000원' },
+]
+
+export default function TooltipCopyExample() {
+  const [copyLog, setCopyLog] = useState<string[]>([])
+
+  return (
+    <Table<Product>
+      columns={columns}
+      data={data}
+      rowKey={(row) => String(row.id)}
+      // 셀 호버 시 overflow 텍스트를 툴팁으로 표시
+      tooltip={true}
+      // copyable 열에서 우클릭 시 복사 메뉴 표시
+      copyable={true}
+      // 복사 발생 시 콜백
+      onCellCopy={(rowKey, colKey, value) => {
+        setCopyLog((prev) => [\`\${colKey}: \${value}\`, ...prev].slice(0, 5))
+      }}
+    />
+  )
+}`;
+
+const HEADER_MENU_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef, SortState } from '@mycrm-ui/react-table'
+
+interface Employee {
+  id: number
+  name: string
+  role: string
+  department: string
+}
+
+const columns: ColumnDef<Employee>[] = [
+  { key: 'name', label: '이름', sortable: true, filterType: 'text', render: (row) => row.name },
+  { key: 'role', label: '역할', sortable: true, filterType: 'text', render: (row) => row.role },
+  { key: 'department', label: '부서', sortable: true, filterType: 'text', render: (row) => row.department },
+]
+
+const data: Employee[] = [
+  { id: 1, name: '홍길동', role: '개발자', department: '개발팀' },
+  { id: 2, name: '김철수', role: '디자이너', department: '디자인팀' },
+  { id: 3, name: '이영희', role: '기획자', department: '기획팀' },
+]
+
+export default function HeaderMenuExample() {
+  const [sorts, setSorts] = useState<SortState[]>([])
+  const [showFilter, setShowFilter] = useState(false)
+  const [filters, setFilters] = useState<Record<string, string>>({})
+
+  return (
+    <Table<Employee>
+      columns={columns}
+      data={data}
+      rowKey={(row) => String(row.id)}
+      sorting={{ sorts, onSortsChange: setSorts }}
+      filter={{
+        enabled: showFilter,
+        values: filters,
+        onChange: (key, val) => setFilters((prev) => ({ ...prev, [key]: val })),
+      }}
+      // 헤더 우상단에 표시할 아이콘 — 클릭 시 드롭다운 메뉴가 열림
+      headerMenuIcon={
+        <span className="material-symbols-outlined">more_horiz</span>
+      }
+      // columnManager를 함께 설정하면 "컬럼 관리" 항목이 자동으로 추가됨
+      headerMenuItems={[
+        {
+          label: showFilter ? '필터 숨기기' : '필터 표시',
+          onClick: () => setShowFilter((v) => !v),
+        },
+        {
+          label: '필터 초기화',
+          onClick: () => setFilters({}),
+        },
+        {
+          label: '정렬 초기화',
+          onClick: () => setSorts([]),
+        },
+      ]}
+    />
+  )
+}`;
+
 async function highlight(code: string) {
   return codeToHtml(code, { lang: "tsx", theme: "one-dark-pro" });
 }
@@ -871,7 +1055,7 @@ const TOC_GROUPS: TocGroup[] = [
 ];
 
 export default async function ReactTablePage() {
-  const [basicHtml, singleSortHtml, multiSortHtml, selectionHtml, filterHtml, rowActionsHtml, editingHtml, loadingHtml, virtualScrollHtml, columnManagerHtml, expandHtml] = await Promise.all([
+  const [basicHtml, singleSortHtml, multiSortHtml, selectionHtml, filterHtml, rowActionsHtml, editingHtml, loadingHtml, virtualScrollHtml, columnManagerHtml, expandHtml, rowEventsHtml, tooltipCopyHtml, headerMenuHtml] = await Promise.all([
     highlight(BASIC_CODE),
     highlight(SINGLE_SORT_CODE),
     highlight(MULTI_SORT_CODE),
@@ -883,6 +1067,9 @@ export default async function ReactTablePage() {
     highlight(VIRTUAL_SCROLL_CODE),
     highlight(COLUMN_MANAGER_CODE),
     highlight(EXPAND_CODE),
+    highlight(ROW_EVENTS_CODE),
+    highlight(TOOLTIP_COPY_CODE),
+    highlight(HEADER_MENU_CODE),
   ]);
   return (
     <>
@@ -1080,18 +1267,7 @@ export default async function ReactTablePage() {
               </div>
               <h2 className="text-2xl font-bold text-on-surface">행 클릭 / 키보드 내비게이션</h2>
             </div>
-            <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-              <code>{`<Table
-  columns={columns}
-  data={data}
-  rowKey={(row) => String(row.id)}
-  onRowClick={(row, rowKey, event) => console.log('클릭:', row)}
-  onRowDoubleClick={(row, rowKey, event) => console.log('더블클릭:', row)}
-  rowClassName={(row, rowKey) => row.role === 'admin' ? 'admin-row' : undefined}
-  keyboardNavigation={true}
-  onFocusedCellChange={(cell) => console.log('포커스:', cell)}
-/>`}</code>
-            </pre>
+            <RowEventsDemo codeHtml={rowEventsHtml} />
           </section>
 
           <section className="mb-16" id="react-table-tooltip-copy">
@@ -1101,22 +1277,12 @@ export default async function ReactTablePage() {
               </div>
               <h2 className="text-2xl font-bold text-on-surface">툴팁 / 복사</h2>
             </div>
-            <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-              <code>{`<Table
-  columns={columns}
-  data={data}
-  rowKey={(row) => String(row.id)}
-  tooltip={true}
-  copyable={true}
-  onCellCopy={(rowKey, colKey, value) => console.log('복사:', value)}
-  cellContextMenuItems={[
-    {
-      label: '클립보드에 복사',
-      onClick: (rowKey, colKey, value) => navigator.clipboard.writeText(value),
-    },
-  ]}
-/>`}</code>
-            </pre>
+            <p className="mb-6 leading-relaxed text-on-surface-variant">
+              <code>tooltip</code>을 켜면 셀 호버 시 값이 툴팁으로 표시됩니다.
+              <code>copyable</code>을 켜면 <code>copyable: true</code>인 열에서 우클릭 컨텍스트 메뉴가 열립니다.
+              <code>onCellCopy</code>로 복사 이벤트를 수신하고, <code>cellContextMenuItems</code>로 메뉴 항목을 추가할 수 있습니다.
+            </p>
+            <TooltipCopyDemo codeHtml={tooltipCopyHtml} />
           </section>
 
           <section className="mb-16" id="react-table-header-menu">
@@ -1126,18 +1292,11 @@ export default async function ReactTablePage() {
               </div>
               <h2 className="text-2xl font-bold text-on-surface">헤더 메뉴</h2>
             </div>
-            <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-              <code>{`<Table
-  columns={columns}
-  data={data}
-  rowKey={(row) => String(row.id)}
-  headerMenuItems={[
-    { label: 'CSV 내보내기', onClick: () => exportCsv() },
-    { label: '새로고침', onClick: () => refetch() },
-  ]}
-  headerMenuIcon={<MenuIcon />}
-/>`}</code>
-            </pre>
+            <p className="mb-6 leading-relaxed text-on-surface-variant">
+              <code>headerMenuIcon</code>을 지정하면 헤더 우상단에 아이콘 버튼이 표시됩니다. 클릭 시 <code>headerMenuItems</code> 드롭다운이 열립니다.{" "}
+              <code>columnManager</code>를 함께 설정하면 <code>컬럼 관리</code> 항목이 자동으로 추가됩니다.
+            </p>
+            <HeaderMenuDemo codeHtml={headerMenuHtml} />
           </section>
 
           <section className="mb-16" id="react-table-classnames">
@@ -1147,29 +1306,229 @@ export default async function ReactTablePage() {
               </div>
               <h2 className="text-2xl font-bold text-on-surface">CSS 커스터마이징</h2>
             </div>
-            <p className="mb-6 leading-relaxed text-on-surface-variant">모든 시각적 요소에 <code>className</code> 슬롯이 제공됩니다.</p>
-            <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
-              <code>{`<Table
-  columns={columns}
-  data={data}
-  rowKey={(row) => String(row.id)}
-  classNames={{
-    table: 'my-table',
-    thead: 'my-thead',
-    th: 'my-th',
-    tr: 'my-row',
-    td: 'my-cell',
-    tdEditing: 'my-cell--editing',
-    checkbox: 'my-checkbox',
-    filterRow: 'my-filter-row',
-    filterInput: 'my-filter-input',
-    groupRow: 'my-group-row',
-    childRow: 'my-child-row',
-    editError: 'my-edit-error',
-    tdFocused: 'my-cell--focused',
-  }}
-/>`}</code>
-            </pre>
+            <p className="mb-6 leading-relaxed text-on-surface-variant">
+              <code>classNames</code> prop으로 모든 시각적 요소에 className 슬롯이 제공됩니다. 아래에서 테마를 선택해 차이를 확인하세요.
+            </p>
+            <CssCustomDemo />
+            <div className="mt-8 overflow-hidden rounded-xl border border-outline-variant/25 bg-surface-container-lowest">
+              <table className="w-full text-sm">
+                <thead className="bg-surface-container-low text-on-surface-variant">
+                  <tr>
+                    <th className="px-4 py-3 text-left font-semibold">슬롯</th>
+                    <th className="px-4 py-3 text-left font-semibold">적용 요소</th>
+                    <th className="px-4 py-3 text-left font-semibold">관련 기능</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* 기본 레이아웃 */}
+                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
+                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">기본 레이아웃</td>
+                  </tr>
+                  {[
+                    ["wrap", "테이블 최외곽 div", "스크롤 컨테이너 (height + overflow-y 설정)"],
+                    ["table", "<table>", "기본"],
+                    ["thead", "<thead>", "기본"],
+                    ["th", "<th> (헤더 셀)", "기본"],
+                    ["tbody", "<tbody>", "기본"],
+                    ["tr", "<tr> (데이터 행)", "기본"],
+                    ["td", "<td> (데이터 셀)", "기본"],
+                  ].map(([slot, el, desc]) => (
+                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
+                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
+                    </tr>
+                  ))}
+                  {/* 정렬 */}
+                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
+                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">정렬</td>
+                  </tr>
+                  {[
+                    ["sortPriority", "다중 정렬 우선순위 숫자", "정렬"],
+                  ].map(([slot, el, desc]) => (
+                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
+                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
+                    </tr>
+                  ))}
+                  {/* 체크박스 선택 */}
+                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
+                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">체크박스 선택</td>
+                  </tr>
+                  {[
+                    ["checkbox", "<input type='checkbox'>", "선택"],
+                    ["checkboxChecked", "체크된 상태의 체크박스", "선택"],
+                  ].map(([slot, el, desc]) => (
+                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
+                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
+                    </tr>
+                  ))}
+                  {/* 필터 */}
+                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
+                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">필터</td>
+                  </tr>
+                  {[
+                    ["filterRow", "필터 입력 행 <tr>", "필터"],
+                    ["filterCell", "필터 행의 <th>", "필터"],
+                    ["filterInput", "텍스트 / 날짜 / 숫자 범위 <input>", "필터"],
+                    ["filterSelect", "select 필터 <select>", "필터"],
+                  ].map(([slot, el, desc]) => (
+                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
+                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
+                    </tr>
+                  ))}
+                  {/* 인라인 편집 */}
+                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
+                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">인라인 편집</td>
+                  </tr>
+                  {[
+                    ["tdEditing", "편집 중인 <td>", "인라인 편집"],
+                    ["editError", "편집 에러 메시지", "인라인 편집"],
+                    ["tdFocused", "키보드 포커스된 <td>", "키보드 내비게이션"],
+                  ].map(([slot, el, desc]) => (
+                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
+                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
+                    </tr>
+                  ))}
+                  {/* 행 삭제 / 추가 */}
+                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
+                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">행 삭제 / 추가</td>
+                  </tr>
+                  {[
+                    ["addRow", "새 행 추가 <tr>", "행 추가"],
+                    ["addInput", "추가 행의 입력 필드", "행 추가"],
+                    ["addConfirmBtn", "추가 확인 버튼", "행 추가"],
+                    ["addCancelBtn", "추가 취소 버튼", "행 추가"],
+                  ].map(([slot, el, desc]) => (
+                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
+                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
+                    </tr>
+                  ))}
+                  {/* 헤더 메뉴 */}
+                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
+                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">헤더 메뉴</td>
+                  </tr>
+                  {[
+                    ["headerMenuBtn", "⋯ 버튼", "헤더 메뉴"],
+                    ["headerMenuDropdown", "드롭다운 컨테이너", "헤더 메뉴"],
+                    ["headerMenuItem", "드롭다운 각 항목 <button>", "헤더 메뉴"],
+                  ].map(([slot, el, desc]) => (
+                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
+                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
+                    </tr>
+                  ))}
+                  {/* 컬럼 관리 */}
+                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
+                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">컬럼 관리</td>
+                  </tr>
+                  {[
+                    ["columnManagerBackdrop", "모달 배경 오버레이", "컬럼 관리"],
+                    ["columnManager", "모달 컨테이너", "컬럼 관리"],
+                    ["columnManagerHeader", "모달 헤더", "컬럼 관리"],
+                    ["columnManagerTitle", "모달 제목", "컬럼 관리"],
+                    ["columnManagerSelectAllBtn", "전체 선택 버튼", "컬럼 관리"],
+                    ["columnManagerDeselectAllBtn", "전체 해제 버튼", "컬럼 관리"],
+                    ["columnManagerCloseBtn", "닫기 버튼", "컬럼 관리"],
+                    ["columnManagerBody", "모달 본문 (토글 목록 영역)", "컬럼 관리"],
+                    ["columnToggle", "컬럼 토글 항목", "컬럼 관리"],
+                    ["columnToggleActive", "표시 중인 컬럼 토글", "컬럼 관리"],
+                    ["columnToggleCheckbox", "토글 체크박스", "컬럼 관리"],
+                  ].map(([slot, el, desc]) => (
+                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
+                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
+                    </tr>
+                  ))}
+                  {/* 컬럼 리사이즈 / 드래그 / 핀 */}
+                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
+                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">컬럼 리사이즈 / 드래그 / 핀</td>
+                  </tr>
+                  {[
+                    ["resizeHandle", "리사이즈 핸들 div", "컬럼 리사이즈"],
+                    ["thDragging", "드래그 중인 <th>", "컬럼 드래그 순서 변경"],
+                    ["thDragOver", "드래그 오버된 <th>", "컬럼 드래그 순서 변경"],
+                    ["thPinnedLeft", "좌측 고정 <th>", "컬럼 핀"],
+                    ["thPinnedRight", "우측 고정 <th>", "컬럼 핀"],
+                    ["tdPinnedLeft", "좌측 고정 <td>", "컬럼 핀"],
+                    ["tdPinnedRight", "우측 고정 <td>", "컬럼 핀"],
+                  ].map(([slot, el, desc]) => (
+                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
+                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
+                    </tr>
+                  ))}
+                  {/* 컨텍스트 메뉴 */}
+                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
+                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">컨텍스트 메뉴 / 툴팁 / 복사</td>
+                  </tr>
+                  {[
+                    ["contextMenu", "헤더 우클릭 컨텍스트 메뉴", "컬럼 핀 컨텍스트 메뉴"],
+                    ["contextMenuItem", "컨텍스트 메뉴 항목", "컬럼 핀 컨텍스트 메뉴"],
+                    ["tooltip", "셀 호버 툴팁", "툴팁"],
+                    ["cellCopyMenu", "셀 우클릭 복사 메뉴", "복사"],
+                    ["cellCopyMenuItem", "복사 메뉴 항목", "복사"],
+                  ].map(([slot, el, desc]) => (
+                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
+                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
+                    </tr>
+                  ))}
+                  {/* 확장 행 */}
+                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
+                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">확장 행</td>
+                  </tr>
+                  {[
+                    ["groupRow", "그룹(부모) 행 <tr>", "확장 행"],
+                    ["groupCell", "그룹 행 <td>", "확장 행"],
+                    ["expandIcon", "펼치기 / 접기 아이콘", "확장 행"],
+                    ["childRow", "자식 행 <tr>", "확장 행"],
+                    ["childTd", "자식 행 <td>", "확장 행"],
+                    ["childIndent", "자식 행 들여쓰기 div", "확장 행"],
+                  ].map(([slot, el, desc]) => (
+                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
+                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
+                    </tr>
+                  ))}
+                  {/* 로딩 / 빈 상태 / 가상 스크롤 */}
+                  <tr className="border-t border-outline-variant/20 bg-surface-container-low/50">
+                    <td colSpan={3} className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-on-surface-variant/60">로딩 / 빈 상태 / 가상 스크롤</td>
+                  </tr>
+                  {[
+                    ["skeletonRow", "스켈레톤 행 <tr>", "로딩"],
+                    ["skeletonCell", "스켈레톤 <td>", "로딩"],
+                    ["skeletonBar", "스켈레톤 바 (shimmer 애니메이션)", "로딩"],
+                    ["emptyRow", "빈 상태 행 <tr>", "빈 상태"],
+                    ["emptyCell", "빈 상태 <td>", "빈 상태"],
+                    ["loadMoreRow", "더 불러오기 행 <tr>", "가상 스크롤"],
+                    ["loadMoreCell", "더 불러오기 <td>", "가상 스크롤"],
+                    ["sentinelRow", "무한 스크롤 감지 행", "가상 스크롤"],
+                    ["virtualPadding", "가상 스크롤 상·하단 패딩 행", "가상 스크롤"],
+                  ].map(([slot, el, desc]) => (
+                    <tr key={slot} className="border-t border-outline-variant/20 hover:bg-surface-container-lowest transition-colors">
+                      <td className="px-4 py-2.5 font-mono text-xs">{slot}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{el}</td>
+                      <td className="px-4 py-2.5 text-on-surface-variant">{desc}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
 
           <section className="mb-16" id="column-def">
