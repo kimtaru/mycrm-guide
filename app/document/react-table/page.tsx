@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { codeToHtml } from "shiki";
+import Link from "next/link";
 import TocAside from "../toc-aside";
 import type { TocGroup } from "../toc-aside";
 import BasicDemo from "./basic-demo";
@@ -1096,11 +1097,30 @@ export default async function ReactTablePage() {
           </header>
 
           <section className="mb-16" id="react-table-basic">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <span className="material-symbols-outlined">table_chart</span>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">table_chart</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">기본 사용</h2>
               </div>
-              <h2 className="text-2xl font-bold text-on-surface">기본 사용</h2>
+              <div className="flex items-center gap-2 pt-1">
+                <span className="text-[11px] font-semibold text-secondary">
+                  LLM Guide
+                </span>
+                <Link
+                  href="/document/react-table/llm/basic"
+                  className="inline-flex items-center rounded-full border border-secondary/20 bg-secondary/5 px-2.5 py-0.5 text-[11px] font-semibold text-secondary transition-colors hover:border-secondary/35 hover:bg-secondary/10"
+                >
+                  Viewer
+                </Link>
+                <a
+                  href="/document/react-table/basic-llm-guide.md"
+                  className="inline-flex items-center rounded-full border border-secondary/20 bg-secondary/5 px-2.5 py-0.5 text-[11px] font-semibold text-secondary transition-colors hover:border-secondary/35 hover:bg-secondary/10"
+                >
+                  MD
+                </a>
+              </div>
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">
               <code>columns</code>, <code>data</code>, <code>rowKey</code>만으로 기본 테이블을 렌더링합니다.
