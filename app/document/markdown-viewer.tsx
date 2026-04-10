@@ -183,13 +183,19 @@ export default function MarkdownViewer({ markdown }: { markdown: string }) {
             );
           }
 
+          if (block.type === "code") {
+            return (
+              <pre
+                key={index}
+                className="overflow-x-auto rounded-xl bg-inverse-surface p-5 font-mono text-sm text-inverse-on-surface shadow-sm"
+              >
+                <code data-language={block.lang || undefined}>{block.code}</code>
+              </pre>
+            );
+          }
+
           return (
-            <pre
-              key={index}
-              className="overflow-x-auto rounded-xl bg-inverse-surface p-5 font-mono text-sm text-inverse-on-surface shadow-sm"
-            >
-              <code data-language={block.lang || undefined}>{block.code}</code>
-            </pre>
+            null
           );
         })}
       </article>
