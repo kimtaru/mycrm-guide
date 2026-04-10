@@ -269,8 +269,3 @@ export default function ExampleTable({ rows }: { rows: Row[] }) {
 - 검색이나 조건 필터가 필요함
 - 인라인 편집이 필요함
 - 행 추가/삭제가 필요함
-
-## 저장소 참고 파일
-
-- `app/document/react-table/sorting-demo.tsx`
-- `app/document/react-table/page.tsx`

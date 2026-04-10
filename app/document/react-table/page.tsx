@@ -19,6 +19,31 @@ import HeaderMenuDemo from "./header-menu-demo";
 import CssCustomDemo from "./css-custom-demo";
 import CssClassnamesTable from "./css-classnames-table";
 
+function LlmGuideActions({ partSlug }: { partSlug: string }) {
+  const viewerBaseHref = `/document/react-table/llm/${partSlug}`;
+  const mdEntryHref = `/document/react-table/llm/${partSlug}/md`;
+
+  return (
+    <div className="flex flex-wrap items-center gap-2 pt-1">
+      <span className="text-[11px] font-semibold text-secondary">
+        LLM Guide
+      </span>
+      <Link
+        href={viewerBaseHref}
+        className="inline-flex items-center rounded-full border border-secondary/20 bg-secondary/5 px-2.5 py-0.5 text-[11px] font-semibold text-secondary transition-colors hover:border-secondary/35 hover:bg-secondary/10"
+      >
+        Viewer
+      </Link>
+      <Link
+        href={mdEntryHref}
+        className="inline-flex items-center rounded-full border border-secondary/20 bg-secondary/5 px-2.5 py-0.5 text-[11px] font-semibold text-secondary transition-colors hover:border-secondary/35 hover:bg-secondary/10"
+      >
+        MD
+      </Link>
+    </div>
+  );
+}
+
 const BASIC_CODE = `import { Table } from '@mycrm-ui/react-table'
 import type { ColumnDef } from '@mycrm-ui/react-table'
 
@@ -1104,23 +1129,7 @@ export default async function ReactTablePage() {
                 </div>
                 <h2 className="text-2xl font-bold text-on-surface">기본 사용</h2>
               </div>
-              <div className="flex items-center gap-2 pt-1">
-                <span className="text-[11px] font-semibold text-secondary">
-                  LLM Guide
-                </span>
-                <Link
-                  href="/document/react-table/llm/basic"
-                  className="inline-flex items-center rounded-full border border-secondary/20 bg-secondary/5 px-2.5 py-0.5 text-[11px] font-semibold text-secondary transition-colors hover:border-secondary/35 hover:bg-secondary/10"
-                >
-                  Viewer
-                </Link>
-                <a
-                  href="/document/react-table/basic-llm-guide.md"
-                  className="inline-flex items-center rounded-full border border-secondary/20 bg-secondary/5 px-2.5 py-0.5 text-[11px] font-semibold text-secondary transition-colors hover:border-secondary/35 hover:bg-secondary/10"
-                >
-                  MD
-                </a>
-              </div>
+              <LlmGuideActions partSlug="basic" />
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">
               <code>columns</code>, <code>data</code>, <code>rowKey</code>만으로 기본 테이블을 렌더링합니다.
@@ -1136,23 +1145,7 @@ export default async function ReactTablePage() {
                 </div>
                 <h2 className="text-2xl font-bold text-on-surface">정렬</h2>
               </div>
-              <div className="flex items-center gap-2 pt-1">
-                <span className="text-[11px] font-semibold text-secondary">
-                  LLM Guide
-                </span>
-                <Link
-                  href="/document/react-table/llm/sorting"
-                  className="inline-flex items-center rounded-full border border-secondary/20 bg-secondary/5 px-2.5 py-0.5 text-[11px] font-semibold text-secondary transition-colors hover:border-secondary/35 hover:bg-secondary/10"
-                >
-                  Viewer
-                </Link>
-                <a
-                  href="/document/react-table/sorting-llm-guide.md"
-                  className="inline-flex items-center rounded-full border border-secondary/20 bg-secondary/5 px-2.5 py-0.5 text-[11px] font-semibold text-secondary transition-colors hover:border-secondary/35 hover:bg-secondary/10"
-                >
-                  MD
-                </a>
-              </div>
+              <LlmGuideActions partSlug="sorting" />
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">단일 정렬과 멀티 정렬을 모두 지원합니다.</p>
             <div className="space-y-8">
@@ -1168,11 +1161,14 @@ export default async function ReactTablePage() {
           </section>
 
           <section className="mb-16" id="react-table-selection">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <span className="material-symbols-outlined">check_box</span>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">check_box</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">체크박스 선택</h2>
               </div>
-              <h2 className="text-2xl font-bold text-on-surface">체크박스 선택</h2>
+              <LlmGuideActions partSlug="selection" />
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">
               <code>selection</code> 옵션으로 체크박스 행 선택을 활성화합니다. 헤더의 체크박스로 전체 선택/해제가 가능합니다.
@@ -1181,11 +1177,14 @@ export default async function ReactTablePage() {
           </section>
 
           <section className="mb-16" id="react-table-filter">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <span className="material-symbols-outlined">filter_alt</span>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">filter_alt</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">필터</h2>
               </div>
-              <h2 className="text-2xl font-bold text-on-surface">필터</h2>
+              <LlmGuideActions partSlug="filter" />
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">
               컬럼 단위 필터를 제공합니다. <code>filterType</code>으로 텍스트, 셀렉트, 날짜 범위, 숫자 범위 필터를 선택할 수 있습니다.
@@ -1194,11 +1193,14 @@ export default async function ReactTablePage() {
           </section>
 
           <section className="mb-16" id="react-table-row-actions">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <span className="material-symbols-outlined">edit_note</span>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">edit_note</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">행 삭제 / 추가</h2>
               </div>
-              <h2 className="text-2xl font-bold text-on-surface">행 삭제 / 추가</h2>
+              <LlmGuideActions partSlug="row-actions" />
             </div>
             <div className="mb-6 space-y-2 leading-relaxed text-on-surface-variant">
               <p>
@@ -1215,11 +1217,14 @@ export default async function ReactTablePage() {
           </section>
 
           <section className="mb-16" id="react-table-editing">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <span className="material-symbols-outlined">edit</span>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">edit</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">인라인 편집</h2>
               </div>
-              <h2 className="text-2xl font-bold text-on-surface">인라인 편집</h2>
+              <LlmGuideActions partSlug="editing" />
             </div>
             <div className="mb-6 space-y-2 leading-relaxed text-on-surface-variant">
               <p>
@@ -1236,11 +1241,14 @@ export default async function ReactTablePage() {
           </section>
 
           <section className="mb-16" id="react-table-loading">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <span className="material-symbols-outlined">hourglass_empty</span>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">hourglass_empty</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">로딩 / 빈 상태</h2>
               </div>
-              <h2 className="text-2xl font-bold text-on-surface">로딩 / 빈 상태</h2>
+              <LlmGuideActions partSlug="loading" />
             </div>
             <div className="mb-6 space-y-2 leading-relaxed text-on-surface-variant">
               <p>
@@ -1256,11 +1264,14 @@ export default async function ReactTablePage() {
           </section>
 
           <section className="mb-16" id="react-table-virtual-scroll">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <span className="material-symbols-outlined">view_list</span>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">view_list</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">가상 스크롤</h2>
               </div>
-              <h2 className="text-2xl font-bold text-on-surface">가상 스크롤</h2>
+              <LlmGuideActions partSlug="virtual-scroll" />
             </div>
             <p className="mb-4 leading-relaxed text-on-surface-variant">대용량 데이터를 위한 가상 스크롤과 무한 로딩을 지원합니다.</p>
             <div className="mb-6 rounded-xl border border-outline-variant/20 bg-surface-container-low/40 px-5 py-4 text-sm text-on-surface-variant">
@@ -1276,22 +1287,28 @@ export default async function ReactTablePage() {
           </section>
 
           <section className="mb-16" id="react-table-column-manager">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <span className="material-symbols-outlined">view_column</span>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">view_column</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">컬럼 관리</h2>
               </div>
-              <h2 className="text-2xl font-bold text-on-surface">컬럼 관리</h2>
+              <LlmGuideActions partSlug="column-manager" />
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">컬럼 숨김, 순서 변경, 고정(pin), 리사이즈를 지원합니다. 헤더 메뉴에서 컬럼 관리 모달을 열고, 드래그로 순서를 변경할 수 있습니다.</p>
             <ColumnManagerDemo codeHtml={columnManagerHtml} />
           </section>
 
           <section className="mb-16" id="react-table-expand">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <span className="material-symbols-outlined">expand_more</span>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">expand_more</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">확장 행</h2>
               </div>
-              <h2 className="text-2xl font-bold text-on-surface">확장 행</h2>
+              <LlmGuideActions partSlug="expand" />
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">
               <code>ExpandDef</code>로 그룹(부모)과 자식 행을 구분하여 계층형 테이블을 구성합니다.
@@ -1301,21 +1318,27 @@ export default async function ReactTablePage() {
           </section>
 
           <section className="mb-16" id="react-table-row-events">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <span className="material-symbols-outlined">mouse</span>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">mouse</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">행 클릭 / 키보드 내비게이션</h2>
               </div>
-              <h2 className="text-2xl font-bold text-on-surface">행 클릭 / 키보드 내비게이션</h2>
+              <LlmGuideActions partSlug="row-events" />
             </div>
             <RowEventsDemo codeHtml={rowEventsHtml} />
           </section>
 
           <section className="mb-16" id="react-table-tooltip-copy">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <span className="material-symbols-outlined">content_copy</span>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">content_copy</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">툴팁 / 복사</h2>
               </div>
-              <h2 className="text-2xl font-bold text-on-surface">툴팁 / 복사</h2>
+              <LlmGuideActions partSlug="tooltip-copy" />
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">
               <code>tooltip</code>을 켜면 셀 호버 시 값이 툴팁으로 표시됩니다.
@@ -1326,11 +1349,14 @@ export default async function ReactTablePage() {
           </section>
 
           <section className="mb-16" id="react-table-header-menu">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <span className="material-symbols-outlined">menu</span>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">menu</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">헤더 메뉴</h2>
               </div>
-              <h2 className="text-2xl font-bold text-on-surface">헤더 메뉴</h2>
+              <LlmGuideActions partSlug="header-menu" />
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">
               <code>headerMenuIcon</code>을 지정하면 헤더 우상단에 아이콘 버튼이 표시됩니다. 클릭 시 <code>headerMenuItems</code> 드롭다운이 열립니다.{" "}
@@ -1340,11 +1366,14 @@ export default async function ReactTablePage() {
           </section>
 
           <section className="mb-16" id="react-table-classnames">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <span className="material-symbols-outlined">palette</span>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">palette</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">CSS 커스터마이징</h2>
               </div>
-              <h2 className="text-2xl font-bold text-on-surface">CSS 커스터마이징</h2>
+              <LlmGuideActions partSlug="css-classnames" />
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">
               <code>classNames</code> prop으로 모든 시각적 요소에 className 슬롯이 제공됩니다. 아래에서 테마를 선택해 차이를 확인하세요.
@@ -1354,11 +1383,14 @@ export default async function ReactTablePage() {
           </section>
 
           <section className="mb-16" id="column-def">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-outline/10 text-on-surface-variant">
-                <span className="material-symbols-outlined">settings</span>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-outline/10 text-on-surface-variant">
+                  <span className="material-symbols-outlined">settings</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">ColumnDef 옵션</h2>
               </div>
-              <h2 className="text-2xl font-bold text-on-surface">ColumnDef 옵션</h2>
+              <LlmGuideActions partSlug="column-def" />
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant"><code>ColumnDef</code>의 전체 옵션 목록입니다.</p>
             <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-6 font-mono text-sm text-inverse-on-surface shadow-lg">
