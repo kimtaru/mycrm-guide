@@ -27,12 +27,10 @@ export default function InstallPage() {
       <main className="flex-1 bg-surface px-8 py-12 lg:px-16">
         <div className="max-w-3xl">
           <header className="mb-12">
-            <div className="mb-4 flex items-center gap-2">
+            <div className="mb-4">
               <span className="rounded-full bg-secondary-container/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-on-secondary-container">
                 Guide
               </span>
-              <span className="text-xs text-outline-variant">&bull;</span>
-              <span className="text-xs text-on-surface-variant">2일 전 업데이트</span>
             </div>
             <h1 className="mb-4 text-5xl font-extrabold tracking-tight text-on-surface">
               시작하기

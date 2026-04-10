@@ -98,21 +98,22 @@
 <div class="flex items-center gap-8">
 <span class="text-xl font-bold text-slate-900 dark:text-white">mycrm</span>
 <div class="hidden md:flex gap-6 items-center">
-<a class="text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 py-5" href="#">문서</a>
-<a class="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors py-5" href="#">컴포넌트</a>
+<a class="text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 py-5" href="/document">문서</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors py-5" href="/document/react-table#react-table-basic">컴포넌트</a>
+<!-- 예시 링크 — 추후 복구 시 아래 주석 해제
 <a class="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors py-5" href="#">예시</a>
+-->
 </div>
 </div>
+<!-- 빠른 검색(⌘K) — 추후 복구 시 아래 주석 해제
 <div class="flex items-center gap-4">
 <div class="hidden md:flex items-center bg-surface-container-low px-3 py-1.5 rounded-lg border border-outline-variant/20">
 <span class="material-symbols-outlined text-sm text-outline mr-2">search</span>
 <input class="bg-transparent border-none text-xs focus:ring-0 w-32" placeholder="빠른 검색..." type="text"/>
 <span class="text-[10px] text-outline ml-2 px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">⌘K</span>
 </div>
-<button class="p-2 text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-md transition-all active:scale-95 duration-200">
-<span class="material-symbols-outlined" data-icon="code">code</span>
-</button>
 </div>
+-->
 </div>
 <div class="bg-slate-100 dark:bg-slate-800 h-px w-full absolute bottom-0"></div>
 </nav>
@@ -135,9 +136,9 @@
 <button class="px-8 py-4 bg-gradient-to-r from-primary to-primary-container text-white font-semibold rounded-lg shadow-lg hover:shadow-primary/20 transition-all active:scale-95">
                         시작하기
                     </button>
-<button class="px-8 py-4 bg-surface-container-high text-on-secondary-container font-semibold rounded-lg hover:bg-surface-container-highest transition-all active:scale-95">
+<a href="/document/core#core-types" class="px-8 py-4 bg-surface-container-high text-on-secondary-container font-semibold rounded-lg hover:bg-surface-container-highest transition-all active:scale-95 inline-block">
                         문서 보기
-                    </button>
+                    </a>
 </div>
 </div>
 </div>
@@ -157,7 +158,7 @@
 </div>
 <h3 class="text-xl font-bold mb-4">빠른 CRM 빌드</h3>
 <p class="text-on-surface-variant leading-relaxed">
-                        데이터가 풍부한 CRM 인터페이스를 위해 특별히 제작된 고성능 컴포넌트입니다. 테이블, 칸반 보드, 타임라인 뷰를 즉시 사용할 수 있습니다.
+                        데이터가 풍부한 CRM 인터페이스를 위해 특별히 제작된 고성능 컴포넌트입니다. 테이블 컴포넌트를 바로 사용할 수 있습니다.
                     </p>
 </div>
 <!-- Feature 2 -->
@@ -175,9 +176,9 @@
 <div class="w-12 h-12 rounded-lg bg-tertiary/10 flex items-center justify-center text-tertiary mb-6 group-hover:scale-110 transition-transform">
 <span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
 </div>
-<h3 class="text-xl font-bold mb-4">AI 우선 DX (바이브 코딩)</h3>
+<h3 class="text-xl font-bold mb-4">AI 우선 DX (AI 협업)</h3>
 <p class="text-on-surface-variant leading-relaxed">
-                        LLM에 최적화된 .md 파일을 제공하여 원활한 '바이브 코딩'과 신속한 프로토타이핑을 가능하게 합니다. GPT-4가 레이아웃 전체를 구축하도록 해보세요.
+                        LLM에 최적화된 .md 파일을 제공하여 AI와의 원활한 협업과 신속한 프로토타이핑을 가능하게 합니다. 레이아웃 전체를 한 번에 짜 보도록 시도해 보세요.
                     </p>
 </div>
 </div>
@@ -188,7 +189,7 @@
 <div class="max-w-7xl mx-auto">
 <div class="mb-16 text-center">
 <h2 class="text-4xl font-extrabold tracking-tight mb-4">아키텍처의 힘</h2>
-<p class="text-on-surface-variant max-w-2xl mx-auto">뼈대 로직에서 프리미엄 인터페이스까지 단 몇 분 만에 완성됩니다. 비즈니스 툴을 위해 고안된 가장 유연한 아키텍처입니다.</p>
+<p class="text-on-surface-variant max-w-2xl mx-auto">뼈대 로직에서 프리미엄 인터페이스까지 단 몇 분 만에 완성됩니다. 비즈니스 툴을 위해 고안된 유연한 아키텍처입니다.</p>
 </div>
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 <!-- Code Side -->
@@ -199,20 +200,17 @@
 <div class="w-3 h-3 rounded-full bg-yellow-500/50"></div>
 <div class="w-3 h-3 rounded-full bg-green-500/50"></div>
 </div>
-<span class="text-xs text-inverse-on-surface/50 font-mono ml-4">Dashboard.tsx</span>
+<span class="text-xs text-inverse-on-surface/50 font-mono ml-4">App.tsx</span>
 </div>
 <div class="p-8 font-mono text-sm leading-relaxed overflow-x-auto">
-<div class="text-blue-400">import <span class="text-white">{ CRMProvider, DataTable }</span> from <span class="text-green-400">'@mycrm/core'</span>;</div>
-<div class="mt-4 text-slate-500">// 헤드리스 엔진 초기화</div>
-<div class="text-purple-400">const <span class="text-white">App = () =&gt; (</span></div>
-<div class="pl-4 text-purple-400">&lt;CRMProvider <span class="text-blue-300">apiKey</span>=<span class="text-green-400">"..."</span>&gt;</div>
-<div class="pl-8 text-purple-400">&lt;DataTable</div>
-<div class="pl-12 text-blue-300">source=<span class="text-white">{customers}</span></div>
-<div class="pl-12 text-blue-300">renderRow=<span class="text-white">{(row) =&gt; (</span></div>
-<div class="pl-16 text-white">&lt;<span class="text-primary-fixed-dim">CustomCard</span> <span class="text-blue-300">data</span>={row} /&gt;</div>
-<div class="pl-12 text-white">)}</div>
-<div class="pl-8 text-purple-400">/&gt;</div>
-<div class="pl-4 text-purple-400">&lt;/CRMProvider&gt;</div>
+<div><span class="text-blue-400">import</span> <span class="text-white">{ Table }</span> <span class="text-blue-400">from</span> <span class="text-green-400">'@mycrm-ui/react-table'</span>;</div>
+<div class="mt-4 text-slate-500">// …</div>
+<div><span class="text-purple-400">export const</span> <span class="text-white">App = () =&gt; (</span></div>
+<div class="pl-4 text-purple-400">&lt;Table</div>
+<div class="pl-8 text-blue-300">columns=<span class="text-white">{columns}</span></div>
+<div class="pl-8 text-blue-300">data=<span class="text-white">{rows}</span></div>
+<div class="pl-8 text-blue-300">rowKey=<span class="text-white">{(r) =&gt; r.id}</span></div>
+<div class="pl-4 text-purple-400">/&gt;</div>
 <div class="text-white">);</div>
 </div>
 </div>
@@ -220,43 +218,80 @@
 <div class="relative group">
 <div class="absolute -inset-4 bg-primary/5 rounded-[2rem] blur-2xl group-hover:bg-primary/10 transition-colors"></div>
 <div class="relative bg-white p-6 rounded-xl shadow-2xl border border-outline-variant/10">
-<div class="flex justify-between items-center mb-8">
-<h4 class="text-lg font-bold">수익 분석</h4>
-<div class="flex gap-2">
-<span class="px-2 py-1 bg-surface-container-low text-[10px] font-bold uppercase tracking-wider rounded">월간</span>
-<span class="material-symbols-outlined text-outline">more_vert</span>
+<div class="flex flex-wrap justify-between items-start gap-3 mb-4">
+<div class="min-w-0">
+<h4 class="text-lg font-bold">데이터 그리드</h4>
+<p class="mt-1 text-xs text-on-surface-variant">헤드리스 로직 위에 쌓인 화면 예시</p>
 </div>
+<span class="material-symbols-outlined text-[22px] text-outline shrink-0" aria-hidden="true">table_chart</span>
 </div>
-<img class="w-full h-48 object-cover rounded-lg mb-6 shadow-inner" data-alt="Modern minimalist business analytics dashboard showing professional bar charts and growth metrics in a clean blue and white aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDL5YofR9S8FJ1qXRvxo6Sf0wdRQjj7w5kndC2M1lRpnqcsI3_4O15QcQSIIlti0etA87dBWUJQBXph6RXOVA2_iWSYvz-3Nfz3UEOfoJ8EwkIYHDTQkxug2vtjnoEJQc_TPKtLH9v-RR7scm5vUUCejgX8Z4K0JsnHKJj3gn_RCU3e98Tj2ZaCBL6z53AGwng7CkXLQZeWkVGRz2BELlDdYWkPk9UU4exFrJDuR1_6Ddm6CJVrZIlWK0U_R_WnKlyumu4uEeNTrjYx"/>
-<div class="space-y-4">
-<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-<span class="material-symbols-outlined" data-icon="person">person</span>
+<div class="flex flex-wrap items-center gap-2 mb-4">
+<div class="flex min-h-[38px] min-w-[140px] flex-1 items-center gap-2 rounded-lg border border-outline-variant/20 bg-surface-container-low px-3 py-2 text-xs text-on-surface-variant/80">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant/60">search</span>
+이름, 상태로 검색…
 </div>
-<div>
-<p class="text-sm font-bold">에이비씨 주식회사</p>
-<p class="text-xs text-on-surface-variant">엔터프라이즈 계정</p>
+<button type="button" class="inline-flex h-[38px] items-center gap-1.5 rounded-lg border border-outline-variant/25 bg-surface-container-low px-3 text-xs font-medium text-on-surface-variant" tabindex="-1" aria-hidden="true">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+필터
+</button>
+<span class="inline-flex items-center gap-1 rounded-md bg-primary/10 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
+<span class="material-symbols-outlined text-[14px]">swap_vert</span>
+정렬 적용
+</span>
 </div>
+<div class="rounded-lg border border-outline-variant/15 overflow-hidden shadow-sm">
+<div class="grid grid-cols-[28px_minmax(0,1fr)_76px_52px_58px] items-center gap-1 border-b border-outline-variant/15 bg-surface-container-low px-2 py-2.5 text-[10px] font-semibold uppercase tracking-wide text-on-surface-variant sm:grid-cols-[32px_minmax(0,1fr)_88px_56px_64px] sm:px-3 sm:text-[11px]">
+<span class="flex justify-center"><span class="material-symbols-outlined text-[16px] text-on-surface-variant/50">check_box_outline_blank</span></span>
+<span class="flex min-w-0 items-center gap-1">이름<span class="material-symbols-outlined text-[14px] text-primary">arrow_upward</span></span>
+<span class="text-center">상태</span>
+<span class="text-center">유형</span>
+<span class="text-right">수정</span>
 </div>
-<div class="text-right">
-<p class="text-sm font-bold text-primary">₩16,500,000</p>
-<p class="text-[10px] text-green-600 font-bold">+12.5%</p>
-</div>
-</div>
-<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined" data-icon="person">person</span>
-</div>
-<div>
-<p class="text-sm font-bold">글로벌 테크</p>
-<p class="text-xs text-on-surface-variant">전략적 파트너</p>
-</div>
-</div>
-<div class="text-right">
-<p class="text-sm font-bold text-primary">₩10,800,000</p>
-<p class="text-[10px] text-green-600 font-bold">+5.2%</p>
+<ul class="divide-y divide-outline-variant/10">
+<li class="group/row grid grid-cols-[28px_minmax(0,1fr)_76px_52px_58px] items-center gap-1 px-2 py-2.5 text-sm hover:bg-primary/[0.04] sm:grid-cols-[32px_minmax(0,1fr)_88px_56px_64px] sm:px-3 sm:py-3">
+<span class="flex justify-center opacity-60 group-hover/row:opacity-100"><span class="material-symbols-outlined text-[16px] text-on-surface-variant/70">check_box_outline_blank</span></span>
+<span class="min-w-0 truncate font-medium">Alpha</span>
+<span class="text-center"><span class="inline-block rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-semibold text-primary">활성</span></span>
+<span class="text-center text-xs text-on-surface-variant">B2B</span>
+<span class="text-right font-mono text-[11px] text-on-surface-variant tabular-nums">04.10</span>
+</li>
+<li class="group/row grid grid-cols-[28px_minmax(0,1fr)_76px_52px_58px] items-center gap-1 px-2 py-2.5 text-sm hover:bg-primary/[0.04] sm:grid-cols-[32px_minmax(0,1fr)_88px_56px_64px] sm:px-3 sm:py-3">
+<span class="flex justify-center opacity-60 group-hover/row:opacity-100"><span class="material-symbols-outlined text-[16px] text-on-surface-variant/70">check_box_outline_blank</span></span>
+<span class="min-w-0 truncate font-medium">Beta</span>
+<span class="text-center"><span class="inline-block rounded-full bg-surface-container-high px-2 py-0.5 text-[10px] font-semibold text-on-surface-variant">대기</span></span>
+<span class="text-center text-xs text-on-surface-variant">B2C</span>
+<span class="text-right font-mono text-[11px] text-on-surface-variant tabular-nums">04.09</span>
+</li>
+<li class="group/row grid grid-cols-[28px_minmax(0,1fr)_76px_52px_58px] items-center gap-1 px-2 py-2.5 text-sm hover:bg-primary/[0.04] sm:grid-cols-[32px_minmax(0,1fr)_88px_56px_64px] sm:px-3 sm:py-3">
+<span class="flex justify-center opacity-60 group-hover/row:opacity-100"><span class="material-symbols-outlined text-[16px] text-on-surface-variant/70">check_box_outline_blank</span></span>
+<span class="min-w-0 truncate font-medium">Gamma</span>
+<span class="text-center"><span class="inline-block rounded-full bg-secondary/15 px-2 py-0.5 text-[10px] font-semibold text-secondary">협의</span></span>
+<span class="text-center text-xs text-on-surface-variant">B2B</span>
+<span class="text-right font-mono text-[11px] text-on-surface-variant tabular-nums">04.08</span>
+</li>
+<li class="group/row grid grid-cols-[28px_minmax(0,1fr)_76px_52px_58px] items-center gap-1 px-2 py-2.5 text-sm hover:bg-primary/[0.04] sm:grid-cols-[32px_minmax(0,1fr)_88px_56px_64px] sm:px-3 sm:py-3">
+<span class="flex justify-center opacity-60 group-hover/row:opacity-100"><span class="material-symbols-outlined text-[16px] text-on-surface-variant/70">check_box_outline_blank</span></span>
+<span class="min-w-0 truncate font-medium">Delta</span>
+<span class="text-center"><span class="inline-block rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-semibold text-primary">활성</span></span>
+<span class="text-center text-xs text-on-surface-variant">B2B</span>
+<span class="text-right font-mono text-[11px] text-on-surface-variant tabular-nums">04.07</span>
+</li>
+<li class="group/row grid grid-cols-[28px_minmax(0,1fr)_76px_52px_58px] items-center gap-1 px-2 py-2.5 text-sm hover:bg-primary/[0.04] sm:grid-cols-[32px_minmax(0,1fr)_88px_56px_64px] sm:px-3 sm:py-3">
+<span class="flex justify-center opacity-60 group-hover/row:opacity-100"><span class="material-symbols-outlined text-[16px] text-on-surface-variant/70">check_box_outline_blank</span></span>
+<span class="min-w-0 truncate font-medium">Epsilon</span>
+<span class="text-center"><span class="inline-block rounded-full bg-surface-container-high px-2 py-0.5 text-[10px] font-semibold text-on-surface-variant">대기</span></span>
+<span class="text-center text-xs text-on-surface-variant">B2G</span>
+<span class="text-right font-mono text-[11px] text-on-surface-variant tabular-nums">04.05</span>
+</li>
+</ul>
+<div class="flex flex-wrap items-center justify-between gap-3 border-t border-outline-variant/10 bg-surface-container-low/50 px-2 py-2.5 text-[11px] text-on-surface-variant sm:px-3">
+<span class="tabular-nums"><span class="font-medium text-on-surface">1–5</span><span class="mx-1 text-on-surface-variant/50">/</span>전체 128건</span>
+<div class="flex items-center gap-0.5">
+<span class="rounded px-1.5 py-0.5 text-on-surface-variant/50">‹</span>
+<span class="rounded-md bg-primary/15 px-2 py-0.5 font-semibold text-primary">1</span>
+<span class="rounded px-2 py-0.5 hover:bg-surface-container-high">2</span>
+<span class="rounded px-2 py-0.5 hover:bg-surface-container-high">3</span>
+<span class="rounded px-1.5 py-0.5 text-on-surface-variant/50">›</span>
 </div>
 </div>
 </div>
@@ -272,7 +307,7 @@
 <div class="w-16 h-1 w-16 bg-primary mb-8"></div>
 <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-8">AI 네이티브 DX</h2>
 <p class="text-lg text-inverse-on-surface/70 leading-relaxed mb-8">
-                    기존의 UI 라이브러리는 중첩된 복잡성 때문에 LLM이 사용하기 어렵습니다. mycrm은 **"바이브 코딩"**을 염두에 두고 구축되었습니다. GPT-4와 Claude 3.5 Sonnet이 네이티브하게 이해할 수 있는 구조화된 스키마 정의와 시맨틱 컴포넌트 마커를 제공합니다.
+                    기존의 UI 라이브러리는 중첩된 복잡성 때문에 LLM이 사용하기 어렵습니다. mycrm은 **AI와의 협업**을 염두에 두고 구축되었습니다. 구조화된 스키마 정의와 시맨틱 컴포넌트 마커로, LLM·코딩 에이전트가 읽고 확장하기 쉬운 형태를 지향합니다.
                 </p>
 <ul class="space-y-4 mb-10">
 <li class="flex items-center gap-3">
@@ -301,11 +336,11 @@
 <span class="font-medium text-white/80">AI 어시스턴트</span>
 </div>
 <div class="p-4 bg-white/5 rounded-lg text-sm mb-4 border-l-4 border-primary">
-                        "mycrm 로직을 사용하여 지역 및 거래 규모별 필터링 기능이 있는 리드 추적 테이블을 만들어줘..."
+                        "@mycrm-ui/react-table의 &lt;Table /&gt;로 리드 목록을 만들고, 지역·거래 규모 컬럼에 필터를 붙여줘..."
                     </div>
 <div class="flex justify-end">
 <div class="p-4 bg-primary/20 rounded-lg text-sm max-w-[80%] border border-primary/30">
-                            "알겠습니다. <code>&lt;DataTable /&gt;</code> 엔진과 <code>region</code>, <code>amount</code> 패싯을 사용하겠습니다. 구현 코드는 다음과 같습니다..."
+                            "알겠습니다. <code>ColumnDef</code>로 <code>region</code>, <code>dealSize</code> 컬럼을 두고 <code>filter</code>와 <code>filterType</code>으로 조건을 연결하겠습니다. 구현 코드는 다음과 같습니다..."
                         </div>
 </div>
 </div>
@@ -319,18 +354,15 @@
                 지금 바로 <span class="text-primary">mycrm</span>으로 시작하세요
             </h2>
 <p class="text-xl text-on-surface-variant mb-12 max-w-2xl mx-auto">
-                업계에서 가장 유연한 CRM 엔진으로 엔터프라이즈급 툴을 구축하고 있는 5,000명 이상의 개발자와 함께하세요.
+                헤드리스 테이블 로직으로 CRM·운영 화면을 직접 설계해 보세요.<br />
+                문서와 예제를 따라 설치부터 첫 화면까지 바로 시작할 수 있습니다.
             </p>
-<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+<div class="flex justify-center">
 <button class="w-full sm:w-auto px-10 py-5 bg-primary text-white font-bold rounded-xl shadow-xl hover:bg-primary-container transition-all hover:-translate-y-1">
-                    무료로 시작하기
-                </button>
-<button class="w-full sm:w-auto px-10 py-5 bg-surface-container text-on-surface font-bold rounded-xl hover:bg-surface-container-high transition-all">
-                    전문가와 상담하기
+                    문서로 시작하기
                 </button>
 </div>
 <div class="mt-12 text-sm text-outline font-medium flex items-center justify-center gap-8 opacity-60 grayscale hover:grayscale-0 transition-all">
-<span>MIT 라이선스</span>
 <span>NEXT.JS 지원</span>
 <span>TYPESCRIPT 준비 완료</span>
 </div>
@@ -340,21 +372,13 @@
 <!-- Footer Execution -->
 <footer class="w-full border-t border-slate-100 dark:border-slate-800 mt-20 bg-white dark:bg-slate-900 text-sm font-inter text-slate-500 dark:text-slate-400">
 <div class="max-w-8xl mx-auto py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-<div class="flex flex-col items-center md:items-start gap-2">
+<div class="flex flex-col items-center md:items-start gap-3">
 <span class="font-bold text-slate-900 dark:text-white text-lg">mycrm</span>
-<p>© 2024 mycrm UI. 건축적인 웹을 위해 설계되었습니다.</p>
+<p>© 2026 mycrm UI. 건축적인 웹을 위해 설계되었습니다.</p>
+<a class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 transition-colors hover:border-blue-400 hover:text-blue-600 dark:hover:border-blue-500 dark:hover:text-blue-400" href="https://www.npmjs.com/package/@mycrm-ui/react-table" target="_blank" rel="noopener noreferrer"><span class="material-symbols-outlined text-[16px]" aria-hidden="true">deployed_code</span>npm · @mycrm-ui/react-table</a>
 </div>
-<div class="flex gap-8">
-<a class="text-slate-500 hover:text-blue-500 transition-colors hover:underline underline-offset-4" href="#">GitHub</a>
-<a class="text-slate-500 hover:text-blue-500 transition-colors hover:underline underline-offset-4" href="#">NPM</a>
-<a class="text-slate-500 hover:text-blue-500 transition-colors hover:underline underline-offset-4" href="#">Discord</a>
-<a class="text-slate-500 hover:text-blue-500 transition-colors hover:underline underline-offset-4" href="#">Twitter</a>
-</div>
-<div class="flex items-center gap-4">
-<div class="h-8 w-8 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center opacity-80 hover:opacity-100 cursor-pointer">
-<span class="material-symbols-outlined text-sm">light_mode</span>
-</div>
-<span class="text-xs font-mono bg-slate-50 dark:bg-slate-800 px-2 py-1 rounded">v2.0.4-beta</span>
+<div class="flex items-center">
+<span class="text-xs font-mono bg-slate-50 dark:bg-slate-800 px-2 py-1 rounded">v0.1.4-beta</span>
 </div>
 </div>
 </footer>
