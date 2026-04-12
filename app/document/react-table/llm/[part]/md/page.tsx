@@ -1,89 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { renderReactTableLlmGuideMarkdownPage } from "../../guide-md-page";
+import {
+  getReactTableLlmGuidePart,
+  REACT_TABLE_LLM_GUIDE_PARTS,
+} from "../../guide-parts";
 
-const GUIDE_PARTS = {
-  basic: {
-    titleKo: "기본 사용",
-    titleEn: "Basic Usage",
-    sectionHref: "/document/react-table#react-table-basic",
-  },
-  sorting: {
-    titleKo: "정렬",
-    titleEn: "Sorting",
-    sectionHref: "/document/react-table#react-table-sorting",
-  },
-  selection: {
-    titleKo: "체크박스 선택",
-    titleEn: "Selection",
-    sectionHref: "/document/react-table#react-table-selection",
-  },
-  filter: {
-    titleKo: "필터",
-    titleEn: "Filter",
-    sectionHref: "/document/react-table#react-table-filter",
-  },
-  "row-actions": {
-    titleKo: "행 삭제 / 추가",
-    titleEn: "Row Actions",
-    sectionHref: "/document/react-table#react-table-row-actions",
-  },
-  editing: {
-    titleKo: "인라인 편집",
-    titleEn: "Inline Editing",
-    sectionHref: "/document/react-table#react-table-editing",
-  },
-  loading: {
-    titleKo: "로딩 / 빈 상태",
-    titleEn: "Loading / Empty State",
-    sectionHref: "/document/react-table#react-table-loading",
-  },
-  "virtual-scroll": {
-    titleKo: "가상 스크롤",
-    titleEn: "Virtual Scroll",
-    sectionHref: "/document/react-table#react-table-virtual-scroll",
-  },
-  "column-manager": {
-    titleKo: "컬럼 관리",
-    titleEn: "Column Manager",
-    sectionHref: "/document/react-table#react-table-column-manager",
-  },
-  expand: {
-    titleKo: "확장 행",
-    titleEn: "Expandable Rows",
-    sectionHref: "/document/react-table#react-table-expand",
-  },
-  "row-events": {
-    titleKo: "행 클릭 / 키보드 내비게이션",
-    titleEn: "Row Click / Keyboard Navigation",
-    sectionHref: "/document/react-table#react-table-row-events",
-  },
-  "tooltip-copy": {
-    titleKo: "툴팁 / 복사",
-    titleEn: "Tooltip / Copy",
-    sectionHref: "/document/react-table#react-table-tooltip-copy",
-  },
-  "header-menu": {
-    titleKo: "헤더 메뉴",
-    titleEn: "Header Menu",
-    sectionHref: "/document/react-table#react-table-header-menu",
-  },
-  "css-classnames": {
-    titleKo: "CSS 커스터마이징",
-    titleEn: "CSS Customization",
-    sectionHref: "/document/react-table#react-table-classnames",
-  },
-  "column-def": {
-    titleKo: "ColumnDef 옵션",
-    titleEn: "ColumnDef Options",
-    sectionHref: "/document/react-table#column-def",
-  },
-} as const;
-
-type GuidePartSlug = keyof typeof GUIDE_PARTS;
+type GuidePartSlug = (typeof REACT_TABLE_LLM_GUIDE_PARTS)[number]["partSlug"];
 
 function isGuidePartSlug(value: string): value is GuidePartSlug {
-  return value in GUIDE_PARTS;
+  return REACT_TABLE_LLM_GUIDE_PARTS.some((part) => part.partSlug === value);
 }
 
 export const metadata: Metadata = {
@@ -104,7 +30,11 @@ export default async function ReactTableLlmGuideMarkdownEntryPage({
     notFound();
   }
 
-  const guidePart = GUIDE_PARTS[part];
+  const guidePart = getReactTableLlmGuidePart(part);
+
+  if (!guidePart) {
+    notFound();
+  }
 
   return renderReactTableLlmGuideMarkdownPage({
     partSlug: part,

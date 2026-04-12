@@ -44,6 +44,17 @@ function LlmGuideActions({ partSlug }: { partSlug: string }) {
   );
 }
 
+function LlmSkillSampleAction() {
+  return (
+    <Link
+      href="/document/react-table/llm"
+      className="inline-flex items-center rounded-full border border-secondary/20 bg-secondary/5 px-3 py-1.5 text-sm font-semibold text-secondary transition-colors hover:border-secondary/35 hover:bg-secondary/10"
+    >
+      스킬 샘플 보기
+    </Link>
+  );
+}
+
 const BASIC_CODE = `import { Table } from '@mycrm-ui/react-table'
 import type { ColumnDef } from '@mycrm-ui/react-table'
 
@@ -1119,6 +1130,9 @@ export default async function ReactTablePage() {
               소스코드를 그대로 사용하면 스타일이 적용되지 않은 상태로 렌더링됩니다.
               문서의 미리보기는 이해를 돕기 위해 별도 스타일을 적용한 예시입니다.
             </p>
+            <div className="mt-5">
+              <LlmSkillSampleAction />
+            </div>
           </header>
 
           <section className="mb-16" id="react-table-basic">

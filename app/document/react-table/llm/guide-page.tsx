@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import Link from "next/link";
 import MarkdownViewer from "../../markdown-viewer";
+import { getReactTableLlmGuideMarkdownFileName } from "./guide-parts";
 
 type SearchParamsLike =
   | { lang?: string }
@@ -30,10 +31,6 @@ async function resolveLang(searchParams?: SearchParamsLike): Promise<LlmGuideLan
   return normalizeLang(resolved.lang);
 }
 
-function getMarkdownFileName(partSlug: string, lang: LlmGuideLang) {
-  return `${partSlug}-llm-guide${lang === "en" ? "-en" : ""}.md`;
-}
-
 export async function renderReactTableLlmGuidePage({
   partSlug,
   titleKo,
@@ -44,7 +41,7 @@ export async function renderReactTableLlmGuidePage({
   searchParams,
 }: ReactTableLlmGuidePageOptions) {
   const lang = await resolveLang(searchParams);
-  const markdownFileName = getMarkdownFileName(partSlug, lang);
+  const markdownFileName = getReactTableLlmGuideMarkdownFileName(partSlug, lang);
   const markdownPath = path.join(
     process.cwd(),
     "public",
@@ -56,8 +53,8 @@ export async function renderReactTableLlmGuidePage({
   const title = lang === "en" ? titleEn : titleKo;
   const description = lang === "en" ? descriptionEn : descriptionKo;
   const viewerBaseHref = `/document/react-table/llm/${partSlug}`;
-  const rawKoHref = `/document/react-table/${getMarkdownFileName(partSlug, "ko")}`;
-  const rawEnHref = `/document/react-table/${getMarkdownFileName(partSlug, "en")}`;
+  const rawKoHref = `/document/react-table/${getReactTableLlmGuideMarkdownFileName(partSlug, "ko")}`;
+  const rawEnHref = `/document/react-table/${getReactTableLlmGuideMarkdownFileName(partSlug, "en")}`;
 
   return (
     <main className="flex-1 bg-surface px-8 py-12 lg:px-16">
