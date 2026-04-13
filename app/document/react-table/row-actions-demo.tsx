@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Table } from "@mycrm-ui/react-table";
-import type { ColumnDef } from "@mycrm-ui/react-table";
+import type { ColumnDef, InsertCellProps } from "@mycrm-ui/react-table";
 import CodeToggle from "../code-toggle";
 
 interface User {
@@ -33,6 +33,11 @@ const SELECT_CLASS =
 
 const SELECT_ERROR_CLASS =
   "w-full rounded-lg border border-error/60 bg-surface px-3 py-1.5 text-xs text-on-surface focus:border-error focus:ring-1 focus:ring-error/20 focus:outline-none transition-colors";
+
+type InsertCellRendererProps = Pick<
+  InsertCellProps,
+  "value" | "onChange" | "onConfirm"
+>;
 
 const TABLE_CLASS_NAMES = {
   table: "w-full text-sm",
@@ -93,7 +98,11 @@ export default function RowActionsDemo({ codeHtml }: { codeHtml: string }) {
         label: "이름",
         insertable: true,
         render: (row) => row.name,
-        renderInsertCell: ({ value, onChange, onConfirm }) => (
+        renderInsertCell: ({
+          value,
+          onChange,
+          onConfirm,
+        }: InsertCellRendererProps) => (
           <div>
             <input
               className={addErrors.name ? INPUT_ERROR_CLASS : INPUT_CLASS}
@@ -117,7 +126,11 @@ export default function RowActionsDemo({ codeHtml }: { codeHtml: string }) {
         label: "이메일",
         insertable: true,
         render: (row) => row.email,
-        renderInsertCell: ({ value, onChange, onConfirm }) => (
+        renderInsertCell: ({
+          value,
+          onChange,
+          onConfirm,
+        }: InsertCellRendererProps) => (
           <div>
             <input
               className={addErrors.email ? INPUT_ERROR_CLASS : INPUT_CLASS}
@@ -141,7 +154,10 @@ export default function RowActionsDemo({ codeHtml }: { codeHtml: string }) {
         label: "역할",
         insertable: true,
         render: (row) => row.role,
-        renderInsertCell: ({ value, onChange }) => (
+        renderInsertCell: ({
+          value,
+          onChange,
+        }: Pick<InsertCellRendererProps, "value" | "onChange">) => (
           <div>
             <select
               className={addErrors.role ? SELECT_ERROR_CLASS : SELECT_CLASS}
