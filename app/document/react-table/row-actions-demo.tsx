@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Table } from "@mycrm-ui/react-table";
-import type { ColumnDef, InsertCellProps } from "@mycrm-ui/react-table";
+import type { ColumnDef } from "@mycrm-ui/react-table";
 import CodeToggle from "../code-toggle";
 
 interface User {
@@ -34,10 +34,11 @@ const SELECT_CLASS =
 const SELECT_ERROR_CLASS =
   "w-full rounded-lg border border-error/60 bg-surface px-3 py-1.5 text-xs text-on-surface focus:border-error focus:ring-1 focus:ring-error/20 focus:outline-none transition-colors";
 
-type InsertCellRendererProps = Pick<
-  InsertCellProps,
-  "value" | "onChange" | "onConfirm"
->;
+type InsertCellRendererProps = {
+  value: string;
+  onChange: (value: string) => void;
+  onConfirm: () => void;
+};
 
 const TABLE_CLASS_NAMES = {
   table: "w-full text-sm",
