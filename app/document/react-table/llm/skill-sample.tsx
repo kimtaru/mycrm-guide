@@ -10,7 +10,7 @@ function buildSampleText(lang: LlmGuideLang) {
     const endpointLines = REACT_TABLE_LLM_GUIDE_PARTS
       .map(
         (part) =>
-          `- ${part.titleEn}: ${part.hintEn}\ncurl https://mycrm.co.kr/document/react-table/${part.partSlug}-llm-guide-en.md`,
+          `- ${part.titleEn}: ${part.hintEn}\ncurl https://mycrm-ui.com/document/react-table/${part.partSlug}-llm-guide-en.md`,
       )
       .join("\n");
 
@@ -24,7 +24,7 @@ ${endpointLines}`;
   const endpointLines = REACT_TABLE_LLM_GUIDE_PARTS
     .map(
       (part) =>
-        `- ${part.titleKo}: ${part.hintKo}\ncurl https://mycrm.co.kr/document/react-table/${part.partSlug}-llm-guide.md`,
+        `- ${part.titleKo}: ${part.hintKo}\ncurl https://mycrm-ui.com/document/react-table/${part.partSlug}-llm-guide.md`,
     )
     .join("\n");
 
