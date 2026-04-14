@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "sync:ui": "cd ../mycrm-ui && pnpm build:sync",
+    "dev:sync": "npm run sync:ui && npm run dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
