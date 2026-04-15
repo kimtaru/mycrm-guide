@@ -98,7 +98,6 @@ export default function SideNav() {
         <h3 className="mb-1 text-xs font-bold uppercase tracking-widest text-on-surface-variant">
           Documentation
         </h3>
-        <p className="text-[10px] font-medium text-primary">v0.0.1</p>
       </div>
 
       {/* 간단하게 시작하기 */}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { ArchGridFilterDemo } from "./components/ArchGridFilterDemo";
+import SiteFooter from "./components/SiteFooter";
 
 type FeatureItem = {
   icon: string;
@@ -450,41 +451,12 @@ function PageContent() {
   );
 }
 
-function SiteFooter() {
-  return (
-    <footer className="mt-20 w-full border-t border-outline-variant/15 bg-surface-container-lowest text-sm text-on-surface-variant">
-      <div className="mx-auto flex max-w-8xl flex-col items-center justify-between gap-6 px-6 py-12 md:flex-row">
-        <div className="flex flex-col items-center gap-3 md:items-start">
-          <span className="text-lg font-bold text-on-surface">mycrm</span>
-          <p>© 2026 mycrm UI. 건축적인 웹을 위해 설계되었습니다.</p>
-          <a
-            href="https://www.npmjs.com/package/@mycrm-ui/react-table"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full border border-outline-variant/30 bg-surface-container-low px-3 py-1.5 text-xs font-medium text-on-surface-variant transition-colors hover:border-primary/40 hover:text-primary"
-          >
-            <span className="material-symbols-outlined text-[16px]" aria-hidden>
-              deployed_code
-            </span>
-            npm · @mycrm-ui/react-table
-          </a>
-        </div>
-        <div className="flex items-center">
-          <span className="rounded bg-surface-container-low px-2 py-1 font-mono text-xs">
-            v0.1.405
-          </span>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
 export default function Home() {
   return (
     <>
       <SiteHeader />
       <PageContent />
-      <SiteFooter />
+      <SiteFooter className="mt-20" />
     </>
   );
 }
