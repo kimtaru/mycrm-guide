@@ -12,6 +12,7 @@ import EditingDemo from "./editing-demo";
 import LoadingDemo from "./loading-demo";
 import VirtualScrollDemo from "./virtual-scroll-demo";
 import ColumnManagerDemo from "./column-manager-demo";
+import RowPinningDemo from "./row-pinning-demo";
 import ExpandDemo from "./expand-demo";
 import RowEventsDemo from "./row-events-demo";
 import TooltipCopyDemo from "./tooltip-copy-demo";
@@ -1060,6 +1061,105 @@ export default function HeaderMenuExample() {
   )
 }`;
 
+const ROW_PINNING_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef } from '@mycrm-ui/react-table'
+
+interface Ticket {
+  id: number
+  customer: string
+  owner: string
+  priority: '높음' | '중간' | '낮음'
+}
+
+const PRIORITIES: Ticket['priority'][] = ['높음', '중간', '낮음']
+
+const columns: ColumnDef<Ticket>[] = [
+  { key: 'customer', label: '고객', render: (row) => row.customer },
+  {
+    key: 'owner',
+    label: '담당자',
+    editable: true,
+    filterType: 'text',
+    render: (row) => row.owner,
+  },
+  {
+    key: 'priority',
+    label: '우선순위',
+    editable: true,
+    filterType: 'select',
+    filterOptions: PRIORITIES.map((value) => ({ label: value, value })),
+    renderEditCell: ({ value, onChange, onSave, onCancel }) => (
+      <div>
+        <select value={value} onChange={(e) => onChange(e.target.value)} autoFocus>
+          {PRIORITIES.map((priority) => (
+            <option key={priority} value={priority}>{priority}</option>
+          ))}
+        </select>
+        <button type="button" onClick={onSave}>저장</button>
+        <button type="button" onClick={onCancel}>취소</button>
+      </div>
+    ),
+    render: (row) => row.priority,
+  },
+]
+
+const initialData: Ticket[] = [
+  { id: 101, customer: '네오커머스', owner: '김하늘', priority: '높음' },
+  { id: 102, customer: '미래물산', owner: '박서준', priority: '중간' },
+  { id: 103, customer: '오션테크', owner: '이유진', priority: '높음' },
+  { id: 104, customer: '그린메드', owner: '최민호', priority: '낮음' },
+]
+
+export default function RowPinningExample() {
+  const [data, setData] = useState(initialData)
+  const [pinnedKeys, setPinnedKeys] = useState<string[]>(['103'])
+  const [showFilter, setShowFilter] = useState(false)
+  const [filters, setFilters] = useState<Record<string, string>>({})
+
+  return (
+    <Table
+      columns={columns}
+      data={data}
+      rowKey={(row) => String(row.id)}
+      scroll={{ stickyHeader: true }}
+      filter={{
+        enabled: showFilter,
+        values: filters,
+        onChange: (key, value) =>
+          setFilters((prev) => ({ ...prev, [key]: value })),
+      }}
+      headerMenuItems={[
+        {
+          label: showFilter ? '필터 숨기기' : '필터 표시',
+          onClick: () => setShowFilter((prev) => !prev),
+        },
+      ]}
+      rowPinning={{
+        enabled: true,
+        keys: pinnedKeys,
+        onKeysChange: setPinnedKeys,
+      }}
+      rowActions={{
+        deletable: true,
+        onDelete: (rowKey) => {
+          setData((prev) => prev.filter((row) => String(row.id) !== rowKey))
+          setPinnedKeys((prev) => prev.filter((key) => key !== rowKey))
+        },
+      }}
+      editing={{
+        onCellChange: (rowKey, colKey, value) => {
+          setData((prev) =>
+            prev.map((row) =>
+              String(row.id) === rowKey ? { ...row, [colKey]: value } : row,
+            ),
+          )
+        },
+      }}
+    />
+  )
+}`;
+
 async function highlight(code: string) {
   return codeToHtml(code, { lang: "tsx", theme: "one-dark-pro" });
 }
@@ -1082,6 +1182,7 @@ const TOC_GROUPS: TocGroup[] = [
       { id: "react-table-loading", label: "로딩 / 빈 상태" },
       { id: "react-table-virtual-scroll", label: "가상 스크롤" },
       { id: "react-table-column-manager", label: "컬럼 관리" },
+      { id: "react-table-row-pinning", label: "행 상단 고정" },
       { id: "react-table-expand", label: "확장 행" },
       { id: "react-table-row-events", label: "행 클릭 / 키보드" },
       { id: "react-table-tooltip-copy", label: "툴팁 / 복사" },
@@ -1093,7 +1194,7 @@ const TOC_GROUPS: TocGroup[] = [
 ];
 
 export default async function ReactTablePage() {
-  const [basicHtml, singleSortHtml, multiSortHtml, selectionHtml, filterHtml, rowActionsHtml, editingHtml, loadingHtml, virtualScrollHtml, columnManagerHtml, expandHtml, rowEventsHtml, tooltipCopyHtml, headerMenuHtml] = await Promise.all([
+  const [basicHtml, singleSortHtml, multiSortHtml, selectionHtml, filterHtml, rowActionsHtml, editingHtml, loadingHtml, virtualScrollHtml, columnManagerHtml, rowPinningHtml, expandHtml, rowEventsHtml, tooltipCopyHtml, headerMenuHtml] = await Promise.all([
     highlight(BASIC_CODE),
     highlight(SINGLE_SORT_CODE),
     highlight(MULTI_SORT_CODE),
@@ -1104,6 +1205,7 @@ export default async function ReactTablePage() {
     highlight(LOADING_CODE),
     highlight(VIRTUAL_SCROLL_CODE),
     highlight(COLUMN_MANAGER_CODE),
+    highlight(ROW_PINNING_CODE),
     highlight(EXPAND_CODE),
     highlight(ROW_EVENTS_CODE),
     highlight(TOOLTIP_COPY_CODE),
@@ -1312,6 +1414,23 @@ export default async function ReactTablePage() {
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">컬럼 숨김, 순서 변경, 고정(pin), 리사이즈를 지원합니다. 헤더 메뉴에서 컬럼 관리 모달을 열고, 드래그로 순서를 변경할 수 있습니다.</p>
             <ColumnManagerDemo codeHtml={columnManagerHtml} />
+          </section>
+
+          <section className="mb-16" id="react-table-row-pinning">
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">keep</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">행 상단 고정</h2>
+              </div>
+              <LlmGuideActions partSlug="row-pinning" />
+            </div>
+            <p className="mb-6 leading-relaxed text-on-surface-variant">
+              flat table 행을 우클릭해서 상단에 고정할 수 있습니다.
+              pin된 행은 본문에서 중복 렌더링되지 않고 sticky top 영역에 유지됩니다.
+            </p>
+            <RowPinningDemo codeHtml={rowPinningHtml} />
           </section>
 
           <section className="mb-16" id="react-table-expand">

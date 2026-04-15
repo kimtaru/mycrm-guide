@@ -9,6 +9,7 @@ export interface ReactTableLlmGuidePart {
     | "loading"
     | "virtual-scroll"
     | "column-manager"
+    | "row-pinning"
     | "expand"
     | "row-events"
     | "tooltip-copy"
@@ -94,6 +95,14 @@ export const REACT_TABLE_LLM_GUIDE_PARTS: readonly ReactTableLlmGuidePart[] = [
     hintKo: "컬럼 숨김, 순서 변경, 고정, 너비 변경이 필요할 때 읽는다.",
     hintEn: "Read this when columns need hiding, reordering, pinning, or width control.",
     sectionHref: "/document/react-table#react-table-column-manager",
+  },
+  {
+    partSlug: "row-pinning",
+    titleKo: "행 상단 고정",
+    titleEn: "Row Pinning",
+    hintKo: "중요한 flat table 행을 상단에 고정해야 할 때 읽는다.",
+    hintEn: "Read this when important flat-table rows need to stay pinned at the top.",
+    sectionHref: "/document/react-table#react-table-row-pinning",
   },
   {
     partSlug: "expand",

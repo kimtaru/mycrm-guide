@@ -41,6 +41,7 @@ const COMPONENT_GROUPS: SubGroup[] = [
       { href: "/document/react-table#react-table-loading", label: "로딩 / 빈 상태" },
       { href: "/document/react-table#react-table-virtual-scroll", label: "가상 스크롤" },
       { href: "/document/react-table#react-table-column-manager", label: "컬럼 관리" },
+      { href: "/document/react-table#react-table-row-pinning", label: "행 상단 고정" },
       { href: "/document/react-table#react-table-expand", label: "확장 행" },
       { href: "/document/react-table#react-table-row-events", label: "행 클릭 / 키보드" },
       { href: "/document/react-table#react-table-tooltip-copy", label: "툴팁 / 복사" },
