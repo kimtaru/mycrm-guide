@@ -297,13 +297,13 @@ function AiDxSection() {
               </li>
             ))}
           </ul>
-          <button
-            type="button"
-            className="flex items-center gap-2 rounded-lg border border-outline-variant/30 px-6 py-3 transition-colors hover:bg-white/5"
+          <Link
+            href="/document/react-table/llm"
+            className="inline-flex items-center gap-2 rounded-lg border border-outline-variant/30 px-6 py-3 transition-colors hover:bg-white/5"
           >
             AI 최적화에 대해 더 알아보기
             <span className="material-symbols-outlined">arrow_forward</span>
-          </button>
+          </Link>
         </div>
         <div className="w-full max-w-lg flex-1">
           <div className="relative rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm">
@@ -421,12 +421,12 @@ function FinalCtaSection() {
           문서와 예제를 따라 설치부터 첫 화면까지 바로 시작할 수 있습니다.
         </p>
         <div className="flex justify-center">
-          <button
-            type="button"
-            className="w-full rounded-xl bg-primary px-10 py-5 font-bold text-on-primary shadow-xl transition-all hover:-translate-y-1 hover:bg-primary-container sm:w-auto"
+          <Link
+            href="/document"
+            className="inline-flex w-full items-center justify-center rounded-xl bg-primary px-10 py-5 font-bold text-on-primary shadow-xl transition-all hover:-translate-y-1 hover:bg-primary-container sm:w-auto"
           >
             문서로 시작하기
-          </button>
+          </Link>
         </div>
         <div className="mt-12 flex items-center justify-center gap-8 text-sm font-medium text-outline opacity-60 grayscale transition-all hover:grayscale-0">
           <span>NEXT.JS 지원</span>
@@ -471,7 +471,7 @@ function SiteFooter() {
         </div>
         <div className="flex items-center">
           <span className="rounded bg-surface-container-low px-2 py-1 font-mono text-xs">
-            v0.1.4-beta
+            v0.1.405
           </span>
         </div>
       </div>
