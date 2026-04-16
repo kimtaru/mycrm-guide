@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import { createPageMetadata } from "../../lib/metadata";
 import TocAside from "../toc-aside";
 import type { TocGroup } from "../toc-aside";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "@mycrm-ui/core - mycrm UI",
   description: "@mycrm-ui/core 패키지 문서입니다.",
-};
+  pathname: "/document/core",
+});
 
 const TOC_GROUPS: TocGroup[] = [
   {

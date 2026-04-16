@@ -1,10 +1,21 @@
 import type { Metadata } from "next";
 import { renderReactTableLlmGuidePage } from "../guide-page";
+import { createLlmPageMetadata } from "../metadata";
 
-export const metadata: Metadata = {
-  title: "@mycrm-ui/react-table LLM Guide - 툴팁 / 복사",
-  description: "@mycrm-ui/react-table 툴팁 / 복사 파트의 LLM 가이드입니다.",
-};
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams?: Promise<{ lang?: string }>;
+}): Promise<Metadata> {
+  return createLlmPageMetadata({
+    titleKo: "@mycrm-ui/react-table LLM Guide - 툴팁 / 복사",
+    titleEn: "@mycrm-ui/react-table LLM Guide - Tooltip / Copy",
+    descriptionKo: "@mycrm-ui/react-table 툴팁 / 복사 파트의 LLM 가이드입니다.",
+    descriptionEn: "@mycrm-ui/react-table LLM guide for the tooltip and copy section.",
+    pathname: "/document/react-table/llm/tooltip-copy",
+    searchParams,
+  });
+}
 
 export default async function ReactTableTooltipCopyLlmGuidePage({
   searchParams,

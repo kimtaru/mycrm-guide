@@ -1,10 +1,21 @@
 import type { Metadata } from "next";
 import { renderReactTableLlmGuidePage } from "../guide-page";
+import { createLlmPageMetadata } from "../metadata";
 
-export const metadata: Metadata = {
-  title: "@mycrm-ui/react-table LLM Guide - 인라인 편집",
-  description: "@mycrm-ui/react-table 인라인 편집 파트의 LLM 가이드입니다.",
-};
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams?: Promise<{ lang?: string }>;
+}): Promise<Metadata> {
+  return createLlmPageMetadata({
+    titleKo: "@mycrm-ui/react-table LLM Guide - 인라인 편집",
+    titleEn: "@mycrm-ui/react-table LLM Guide - Inline Editing",
+    descriptionKo: "@mycrm-ui/react-table 인라인 편집 파트의 LLM 가이드입니다.",
+    descriptionEn: "@mycrm-ui/react-table LLM guide for the inline editing section.",
+    pathname: "/document/react-table/llm/editing",
+    searchParams,
+  });
+}
 
 export default async function ReactTableEditingLlmGuidePage({
   searchParams,

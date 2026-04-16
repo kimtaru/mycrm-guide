@@ -1,10 +1,21 @@
 import type { Metadata } from "next";
 import { renderReactTableLlmGuidePage } from "../guide-page";
+import { createLlmPageMetadata } from "../metadata";
 
-export const metadata: Metadata = {
-  title: "@mycrm-ui/react-table LLM Guide - 가상 스크롤",
-  description: "@mycrm-ui/react-table 가상 스크롤 파트의 LLM 가이드입니다.",
-};
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams?: Promise<{ lang?: string }>;
+}): Promise<Metadata> {
+  return createLlmPageMetadata({
+    titleKo: "@mycrm-ui/react-table LLM Guide - 가상 스크롤",
+    titleEn: "@mycrm-ui/react-table LLM Guide - Virtual Scroll",
+    descriptionKo: "@mycrm-ui/react-table 가상 스크롤 파트의 LLM 가이드입니다.",
+    descriptionEn: "@mycrm-ui/react-table LLM guide for the virtual scroll section.",
+    pathname: "/document/react-table/llm/virtual-scroll",
+    searchParams,
+  });
+}
 
 export default async function ReactTableVirtualScrollLlmGuidePage({
   searchParams,

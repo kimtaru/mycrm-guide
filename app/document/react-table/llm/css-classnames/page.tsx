@@ -1,10 +1,21 @@
 import type { Metadata } from "next";
 import { renderReactTableLlmGuidePage } from "../guide-page";
+import { createLlmPageMetadata } from "../metadata";
 
-export const metadata: Metadata = {
-  title: "@mycrm-ui/react-table LLM Guide - CSS 커스터마이징",
-  description: "@mycrm-ui/react-table CSS 커스터마이징 파트의 LLM 가이드입니다.",
-};
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams?: Promise<{ lang?: string }>;
+}): Promise<Metadata> {
+  return createLlmPageMetadata({
+    titleKo: "@mycrm-ui/react-table LLM Guide - CSS 커스터마이징",
+    titleEn: "@mycrm-ui/react-table LLM Guide - CSS Customization",
+    descriptionKo: "@mycrm-ui/react-table CSS 커스터마이징 파트의 LLM 가이드입니다.",
+    descriptionEn: "@mycrm-ui/react-table LLM guide for the CSS customization section.",
+    pathname: "/document/react-table/llm/css-classnames",
+    searchParams,
+  });
+}
 
 export default async function ReactTableCssClassnamesLlmGuidePage({
   searchParams,

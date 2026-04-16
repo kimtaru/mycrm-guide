@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { getSiteUrl } from "./lib/site-url";
 import "./globals.css";
 
 const inter = Inter({
@@ -9,9 +10,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: "mycrm | 빛의 속도로 구축하는 CRM",
   description:
     "React를 위한 헤드리스 UI 라이브러리. 데이터 중심 CRM 인터페이스와 AI 네이티브 DX를 위해 설계되었습니다.",
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: [{ url: "/icon.png", type: "image/png", sizes: "2154x2154" }],
     shortcut: "/icon.png",
