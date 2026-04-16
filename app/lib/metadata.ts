@@ -22,6 +22,9 @@ type LocalizedPageMetadataInput = {
 
 type SupportedLang = "ko" | "en";
 
+const DEFAULT_OG_IMAGE = "/opengraph-image";
+const DEFAULT_SITE_NAME = "mycrm UI";
+
 function normalizeLang(lang?: string): SupportedLang {
   return lang?.toLowerCase() === "en" ? "en" : "ko";
 }
@@ -50,6 +53,27 @@ export function createPageMetadata({
     alternates: {
       canonical: pathname,
     },
+    openGraph: {
+      title,
+      description,
+      url: pathname,
+      siteName: DEFAULT_SITE_NAME,
+      type: "website",
+      images: [
+        {
+          url: DEFAULT_OG_IMAGE,
+          width: 1200,
+          height: 630,
+          alt: `${DEFAULT_SITE_NAME} 대표 공유 이미지`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [DEFAULT_OG_IMAGE],
+    },
   };
 }
 
@@ -69,6 +93,27 @@ export async function createLocalizedPageMetadata({
     alternates: {
       canonical: lang === "en" ? `${pathname}?lang=en` : pathname,
       languages: buildLanguageAlternates(pathname),
+    },
+    openGraph: {
+      title: lang === "en" ? titleEn : titleKo,
+      description: lang === "en" ? descriptionEn : descriptionKo,
+      url: lang === "en" ? `${pathname}?lang=en` : pathname,
+      siteName: DEFAULT_SITE_NAME,
+      type: "article",
+      images: [
+        {
+          url: DEFAULT_OG_IMAGE,
+          width: 1200,
+          height: 630,
+          alt: `${DEFAULT_SITE_NAME} 대표 공유 이미지`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: lang === "en" ? titleEn : titleKo,
+      description: lang === "en" ? descriptionEn : descriptionKo,
+      images: [DEFAULT_OG_IMAGE],
     },
   };
 }
