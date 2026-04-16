@@ -22,7 +22,7 @@ type LocalizedPageMetadataInput = {
 
 type SupportedLang = "ko" | "en";
 
-const DEFAULT_OG_IMAGE = "/og/default.png?v=1";
+const DEFAULT_OG_IMAGE = "/opengraph-image";
 const DEFAULT_SITE_NAME = "mycrm UI";
 
 function normalizeLang(lang?: string): SupportedLang {
