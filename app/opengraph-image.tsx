@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { ImageResponse } from "next/og";
 
 export const size = {
@@ -7,7 +9,24 @@ export const size = {
 
 export const contentType = "image/png";
 
-export default function OpenGraphImage() {
+async function loadInterFont(weight: 400 | 700 | 800) {
+  const filePath = path.join(
+    process.cwd(),
+    "app",
+    "assets",
+    "font",
+    `inter-${weight}.woff`,
+  );
+  return readFile(filePath);
+}
+
+export default async function OpenGraphImage() {
+  const [inter400, inter700, inter800] = await Promise.all([
+    loadInterFont(400),
+    loadInterFont(700),
+    loadInterFont(800),
+  ]);
+
   return new ImageResponse(
     (
       <div
@@ -21,26 +40,15 @@ export default function OpenGraphImage() {
             "linear-gradient(135deg, #f6f8fb 0%, #e9eef7 50%, #d8e3f3 100%)",
           padding: "56px",
           color: "#102033",
-          fontFamily: "sans-serif",
+          fontFamily: "Inter",
         }}
       >
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "16px",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              height: "18px",
-              width: "18px",
-              borderRadius: "999px",
-              background: "#2563eb",
-              boxShadow: "0 0 0 10px rgba(37, 99, 235, 0.12)",
-            }}
-          />
           <div
             style={{
               display: "flex",
@@ -49,7 +57,7 @@ export default function OpenGraphImage() {
               letterSpacing: "-0.03em",
             }}
           >
-            mycrm UI
+            mycrm
           </div>
         </div>
 
@@ -64,34 +72,33 @@ export default function OpenGraphImage() {
           <div
             style={{
               display: "flex",
+              flexDirection: "column",
               fontSize: 72,
               lineHeight: 1.05,
               fontWeight: 800,
               letterSpacing: "-0.05em",
             }}
           >
-            Headless CRM UI
-            <br />
-            for React
+            <div style={{ display: "flex" }}>Headless CRM UI for React</div>
           </div>
           <div
             style={{
               display: "flex",
+              flexDirection: "column",
               fontSize: 30,
               lineHeight: 1.35,
               color: "#3d5877",
               letterSpacing: "-0.02em",
             }}
           >
-            데이터 중심 CRM 인터페이스와 AI 네이티브 DX를 위한
-            문서·컴포넌트 가이드
+            <div style={{ display: "flex" }}>데이터 중심 CRM 인터페이스와</div>
+            <div style={{ display: "flex" }}>AI 네이티브 DX를 위한 문서·컴포넌트 가이드</div>
           </div>
         </div>
 
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "flex-end",
           }}
         >
@@ -102,7 +109,7 @@ export default function OpenGraphImage() {
               flexWrap: "wrap",
             }}
           >
-            {["React", "Data Table", "Docs", "AI Guide"].map((label) => (
+            {["React", "Components", "Docs", "AI Guide"].map((label) => (
               <div
                 key={label}
                 style={{
@@ -120,19 +127,31 @@ export default function OpenGraphImage() {
               </div>
             ))}
           </div>
-          <div
-            style={{
-              display: "flex",
-              fontSize: 24,
-              fontWeight: 600,
-              color: "#456383",
-            }}
-          >
-            www.mycrm-ui.com
-          </div>
         </div>
       </div>
     ),
-    size,
+    {
+      ...size,
+      fonts: [
+        {
+          name: "Inter",
+          data: inter400,
+          style: "normal",
+          weight: 400,
+        },
+        {
+          name: "Inter",
+          data: inter700,
+          style: "normal",
+          weight: 700,
+        },
+        {
+          name: "Inter",
+          data: inter800,
+          style: "normal",
+          weight: 800,
+        },
+      ],
+    },
   );
 }
