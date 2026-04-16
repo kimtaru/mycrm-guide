@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { codeToHtml } from "shiki";
 import Link from "next/link";
+import { createPageMetadata } from "../../lib/metadata";
 import TocAside from "../toc-aside";
 import type { TocGroup } from "../toc-aside";
 import BasicDemo from "./basic-demo";
@@ -1164,10 +1165,11 @@ async function highlight(code: string) {
   return codeToHtml(code, { lang: "tsx", theme: "one-dark-pro" });
 }
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "@mycrm-ui/react-table - mycrm UI",
   description: "@mycrm-ui/react-table 패키지 문서입니다.",
-};
+  pathname: "/document/react-table",
+});
 
 const TOC_GROUPS: TocGroup[] = [
   {

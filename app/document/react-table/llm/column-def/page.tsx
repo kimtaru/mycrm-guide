@@ -1,10 +1,21 @@
 import type { Metadata } from "next";
 import { renderReactTableLlmGuidePage } from "../guide-page";
+import { createLlmPageMetadata } from "../metadata";
 
-export const metadata: Metadata = {
-  title: "@mycrm-ui/react-table LLM Guide - ColumnDef 옵션",
-  description: "@mycrm-ui/react-table ColumnDef 옵션 파트의 LLM 가이드입니다.",
-};
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams?: Promise<{ lang?: string }>;
+}): Promise<Metadata> {
+  return createLlmPageMetadata({
+    titleKo: "@mycrm-ui/react-table LLM Guide - ColumnDef 옵션",
+    titleEn: "@mycrm-ui/react-table LLM Guide - ColumnDef Options",
+    descriptionKo: "@mycrm-ui/react-table ColumnDef 옵션 파트의 LLM 가이드입니다.",
+    descriptionEn: "@mycrm-ui/react-table LLM guide for the ColumnDef options section.",
+    pathname: "/document/react-table/llm/column-def",
+    searchParams,
+  });
+}
 
 export default async function ReactTableColumnDefLlmGuidePage({
   searchParams,

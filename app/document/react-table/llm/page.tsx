@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ReactTableLlmSkillSample from "./skill-sample";
+import { createLlmPageMetadata } from "./metadata";
 
 type SearchParamsLike =
   | { lang?: string }
@@ -19,10 +20,22 @@ async function resolveLang(searchParams?: SearchParamsLike): Promise<LlmGuideLan
   return normalizeLang(resolved.lang);
 }
 
-export const metadata: Metadata = {
-  title: "@mycrm-ui/react-table Skill Sample",
-  description: "@mycrm-ui/react-table LLM skill sample page.",
-};
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams?: Promise<{ lang?: string }>;
+}): Promise<Metadata> {
+  return createLlmPageMetadata({
+    titleKo: "@mycrm-ui/react-table 스킬 샘플",
+    titleEn: "@mycrm-ui/react-table Skill Sample",
+    descriptionKo:
+      "@mycrm-ui/react-table LLM 가이드 엔드포인트를 먼저 읽도록 유도하는 스킬 샘플 페이지입니다.",
+    descriptionEn:
+      "A skill sample page that guides agents to read the @mycrm-ui/react-table LLM guide endpoints first.",
+    pathname: "/document/react-table/llm",
+    searchParams,
+  });
+}
 
 export default async function ReactTableLlmSkillSamplePage({
   searchParams,

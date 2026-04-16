@@ -1,7 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ArchGridFilterDemo } from "./components/ArchGridFilterDemo";
 import SiteFooter from "./components/SiteFooter";
+import { createPageMetadata } from "./lib/metadata";
+
+export const metadata: Metadata = createPageMetadata({
+  title: "mycrm | 빛의 속도로 구축하는 CRM",
+  description:
+    "React를 위한 헤드리스 UI 라이브러리. 데이터 중심 CRM 인터페이스와 AI 네이티브 DX를 위해 설계되었습니다.",
+  pathname: "/",
+});
 
 type FeatureItem = {
   icon: string;
