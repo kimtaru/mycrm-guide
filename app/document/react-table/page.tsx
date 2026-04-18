@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { codeToHtml } from "shiki";
 import Link from "next/link";
 import { createPageMetadata } from "../../lib/metadata";
+import {
+  createReactTableStructuredData,
+  StructuredDataScript,
+} from "../../lib/structured-data";
 import TocAside from "../toc-aside";
 import type { TocGroup } from "../toc-aside";
 import BasicDemo from "./basic-demo";
@@ -1215,6 +1219,7 @@ export default async function ReactTablePage() {
   ]);
   return (
     <>
+      <StructuredDataScript data={createReactTableStructuredData()} />
       <main className="flex-1 bg-surface px-8 py-12 lg:px-16">
         <div className="max-w-3xl">
           <header className="mb-12">

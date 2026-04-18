@@ -4,6 +4,10 @@ import Link from "next/link";
 import { ArchGridFilterDemo } from "./components/ArchGridFilterDemo";
 import SiteFooter from "./components/SiteFooter";
 import { createPageMetadata } from "./lib/metadata";
+import {
+  createHomeStructuredData,
+  StructuredDataScript,
+} from "./lib/structured-data";
 
 export const metadata: Metadata = createPageMetadata({
   title: "mycrm | 빛의 속도로 구축하는 CRM",
@@ -463,6 +467,7 @@ function PageContent() {
 export default function Home() {
   return (
     <>
+      <StructuredDataScript data={createHomeStructuredData()} />
       <SiteHeader />
       <PageContent />
       <SiteFooter className="mt-20" />
