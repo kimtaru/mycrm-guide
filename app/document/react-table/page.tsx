@@ -1171,7 +1171,8 @@ async function highlight(code: string) {
 
 export const metadata: Metadata = createPageMetadata({
   title: "@mycrm-ui/react-table - mycrm UI",
-  description: "@mycrm-ui/react-table 패키지 문서입니다.",
+  description:
+    "@mycrm-ui/react-table 문서입니다. React 18·19용 헤드리스 데이터 테이블 컴포넌트로 정렬, 필터, 선택, 편집, 가상 스크롤 예제를 제공합니다.",
   pathname: "/document/react-table",
 });
 

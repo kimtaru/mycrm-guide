@@ -5,7 +5,8 @@ import type { TocGroup } from "./toc-aside";
 
 export const metadata: Metadata = createPageMetadata({
   title: "시작하기 - mycrm UI",
-  description: "mycrm UI 설치 가이드 페이지입니다.",
+  description:
+    "mycrm UI 설치 가이드입니다. React, TypeScript, peer dependency 설정과 패키지 선택 방법을 빠르게 확인할 수 있습니다.",
   pathname: "/document",
 });
 

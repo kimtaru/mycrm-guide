@@ -12,7 +12,7 @@ import {
 export const metadata: Metadata = createPageMetadata({
   title: "mycrm | 빛의 속도로 구축하는 CRM",
   description:
-    "React를 위한 헤드리스 UI 라이브러리. 데이터 중심 CRM 인터페이스와 AI 네이티브 DX를 위해 설계되었습니다.",
+    "React를 위한 헤드리스 CRM UI 라이브러리입니다. 데이터 중심 인터페이스와 AI 네이티브 DX를 위한 컴포넌트, 문서, 가이드를 제공합니다.",
   pathname: "/",
 });
 

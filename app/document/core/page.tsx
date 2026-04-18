@@ -5,7 +5,8 @@ import type { TocGroup } from "../toc-aside";
 
 export const metadata: Metadata = createPageMetadata({
   title: "@mycrm-ui/core - mycrm UI",
-  description: "@mycrm-ui/core 패키지 문서입니다.",
+  description:
+    "@mycrm-ui/core 문서입니다. 공통 타입, 유틸리티 함수, 포맷터, 에러 클래스로 mycrm UI의 핵심 로직 기반을 제공합니다.",
   pathname: "/document/core",
 });
 
