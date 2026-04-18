@@ -123,9 +123,10 @@ function HeroSection() {
             <span className="text-primary">빛의 속도로 구축하는</span> CRM
           </h1>
           <p className="mb-10 max-w-2xl text-xl leading-relaxed text-on-surface-variant">
-            React를 위한 헤드리스 UI 라이브러리. 데이터 중심의 CRM 인터페이스
-            개발과 AI 네이티브 DX를 위해 설계되었습니다. CSS와 씨름하지 말고
-            바로 기능을 구현하세요.
+            React와 TypeScript를 위한 헤드리스 CRM UI 라이브러리입니다.
+            데이터 중심 인터페이스, data table 컴포넌트, AI 네이티브 DX를
+            빠르게 구축할 수 있도록 설계되었습니다. CSS와 씨름하지 말고 바로
+            기능을 구현하세요.
           </p>
           <div className="flex flex-wrap gap-4">
             <Link

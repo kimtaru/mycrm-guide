@@ -1233,7 +1233,9 @@ export default async function ReactTablePage() {
               @mycrm-ui/react-table
             </h1>
             <p className="text-xl font-light leading-relaxed text-on-surface-variant">
-              React 19 / React 18에서 사용 가능한 고성능 테이블 컴포넌트입니다.
+              React 19와 React 18에서 사용할 수 있는 헤드리스 data table
+              컴포넌트입니다. CRM UI, 어드민 화면, 백오피스에서 필요한 정렬,
+              필터, 선택, 편집 기능을 구성할 수 있습니다.
             </p>
             <p className="mt-3 rounded-lg bg-surface-container-low p-3 text-sm text-on-surface-variant">
               <code>@mycrm-ui/react-table</code>은 헤드리스(Headless) 라이브러리입니다.
