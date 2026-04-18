@@ -5,7 +5,8 @@ import type { TocGroup } from "./toc-aside";
 
 export const metadata: Metadata = createPageMetadata({
   title: "시작하기 - mycrm UI",
-  description: "mycrm UI 설치 가이드 페이지입니다.",
+  description:
+    "mycrm UI 설치 가이드입니다. React, TypeScript, peer dependency 설정과 패키지 선택 방법을 빠르게 확인할 수 있습니다.",
   pathname: "/document",
 });
 
@@ -38,8 +39,9 @@ export default function InstallPage() {
               시작하기
             </h1>
             <p className="text-xl font-light leading-relaxed text-on-surface-variant">
-              고성능과 구조적 안정성을 갖춘 mycrm UI 문서입니다. 데이터 중심
-              애플리케이션에 맞는 컴포넌트 사용법을 빠르게 시작할 수 있습니다.
+              React와 TypeScript 프로젝트에서 mycrm UI를 시작하는 설치
+              가이드입니다. CRM UI 컴포넌트와 data table 기능을 빠르게 붙일 수
+              있도록 패키지 선택, peer dependency, 설정 방법을 정리했습니다.
             </p>
           </header>
 

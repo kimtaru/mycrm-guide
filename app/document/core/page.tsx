@@ -5,7 +5,8 @@ import type { TocGroup } from "../toc-aside";
 
 export const metadata: Metadata = createPageMetadata({
   title: "@mycrm-ui/core - mycrm UI",
-  description: "@mycrm-ui/core 패키지 문서입니다.",
+  description:
+    "@mycrm-ui/core 문서입니다. 공통 타입, 유틸리티 함수, 포맷터, 에러 클래스로 mycrm UI의 핵심 로직 기반을 제공합니다.",
   pathname: "/document/core",
 });
 
@@ -36,7 +37,9 @@ export default function CorePage() {
               @mycrm-ui/core
             </h1>
             <p className="text-xl font-light leading-relaxed text-on-surface-variant">
-              유틸리티 타입, 헬퍼 함수, 포맷터, 에러 클래스 등 프레임워크에 독립적인 핵심 유틸리티 패키지입니다.
+              TypeScript 기반 CRM UI와 data table 로직에 공통으로 쓰는 핵심
+              유틸리티 패키지입니다. 타입, 헬퍼 함수, 포맷터, 에러 클래스를
+              프레임워크 독립적으로 제공합니다.
             </p>
           </header>
 

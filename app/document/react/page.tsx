@@ -5,7 +5,8 @@ import type { TocGroup } from "../toc-aside";
 
 export const metadata: Metadata = createPageMetadata({
   title: "@mycrm-ui/react - mycrm UI",
-  description: "@mycrm-ui/react 패키지 문서입니다.",
+  description:
+    "@mycrm-ui/react 문서입니다. 공통 React 컴포넌트, 컨텍스트, 훅을 통해 mycrm UI 기능을 앱에 안정적으로 연결할 수 있습니다.",
   pathname: "/document/react",
 });
 
@@ -35,7 +36,9 @@ export default function ReactPage() {
               @mycrm-ui/react
             </h1>
             <p className="text-xl font-light leading-relaxed text-on-surface-variant">
-              공통 React 컴포넌트, 컨텍스트, 훅 모음입니다.
+              mycrm UI를 React 앱에 연결하기 위한 공통 React 컴포넌트, 컨텍스트,
+              훅 모음입니다. Portal, ErrorBoundary, Provider 계층을 통해 CRM UI
+              기능을 안정적으로 조립할 수 있습니다.
             </p>
           </header>
 

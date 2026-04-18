@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { codeToHtml } from "shiki";
 import Link from "next/link";
 import { createPageMetadata } from "../../lib/metadata";
+import {
+  createReactTableStructuredData,
+  StructuredDataScript,
+} from "../../lib/structured-data";
 import TocAside from "../toc-aside";
 import type { TocGroup } from "../toc-aside";
 import BasicDemo from "./basic-demo";
@@ -1167,7 +1171,8 @@ async function highlight(code: string) {
 
 export const metadata: Metadata = createPageMetadata({
   title: "@mycrm-ui/react-table - mycrm UI",
-  description: "@mycrm-ui/react-table 패키지 문서입니다.",
+  description:
+    "@mycrm-ui/react-table 문서입니다. React 18·19용 헤드리스 데이터 테이블 컴포넌트로 정렬, 필터, 선택, 편집, 가상 스크롤 예제를 제공합니다.",
   pathname: "/document/react-table",
 });
 
@@ -1215,6 +1220,7 @@ export default async function ReactTablePage() {
   ]);
   return (
     <>
+      <StructuredDataScript data={createReactTableStructuredData()} />
       <main className="flex-1 bg-surface px-8 py-12 lg:px-16">
         <div className="max-w-3xl">
           <header className="mb-12">
@@ -1227,7 +1233,9 @@ export default async function ReactTablePage() {
               @mycrm-ui/react-table
             </h1>
             <p className="text-xl font-light leading-relaxed text-on-surface-variant">
-              React 19 / React 18에서 사용 가능한 고성능 테이블 컴포넌트입니다.
+              React 19와 React 18에서 사용할 수 있는 헤드리스 data table
+              컴포넌트입니다. CRM UI, 어드민 화면, 백오피스에서 필요한 정렬,
+              필터, 선택, 편집 기능을 구성할 수 있습니다.
             </p>
             <p className="mt-3 rounded-lg bg-surface-container-low p-3 text-sm text-on-surface-variant">
               <code>@mycrm-ui/react-table</code>은 헤드리스(Headless) 라이브러리입니다.
