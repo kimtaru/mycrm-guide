@@ -15,6 +15,7 @@ Rules for v1:
 - Use row reordering with flat tables.
 - `rowKey` must return stable strings.
 - The table does not mutate `data` internally. Consumers must reorder the `data` array in `onOrderChange`.
+- Use `isRowReorderable` when some rows must stay locked at their original indexes.
 - Do not combine this with `expand` or `rowPinning`.
 
 ## Required Inputs
@@ -59,6 +60,7 @@ interface Task {
   id: number;
   title: string;
   owner: string;
+  locked: boolean;
 }
 
 const columns: ColumnDef<Task>[] = [
@@ -67,16 +69,16 @@ const columns: ColumnDef<Task>[] = [
     label: "Order",
     width: "64px",
     align: "center",
-    render: () => "⋮⋮",
+    render: (row) => (row.locked ? "Locked" : "⋮⋮"),
   },
   { key: "title", label: "Task", render: (row) => row.title },
   { key: "owner", label: "Owner", render: (row) => row.owner },
 ];
 
 const initialRows: Task[] = [
-  { id: 1, title: "Review contract", owner: "Hannah" },
-  { id: 2, title: "Send quote", owner: "Jun" },
-  { id: 3, title: "Follow-up meeting", owner: "Yujin" },
+  { id: 2, title: "Send quote", owner: "Jun", locked: true },
+  { id: 1, title: "Review contract", owner: "Hannah", locked: false },
+  { id: 3, title: "Follow-up meeting", owner: "Yujin", locked: false },
 ];
 
 export default function TaskTable() {
@@ -100,6 +102,7 @@ export default function TaskTable() {
         enabled: true,
         handleColumnKey: "reorder",
         onOrderChange: handleOrderChange,
+        isRowReorderable: (row) => !row.locked,
       }}
     />
   );
@@ -120,6 +123,25 @@ rowReorder={{
   dragOverColor: "rgba(79, 70, 229, 0.8)",
 }}
 ```
+
+### `isRowReorderable`
+
+Use this when some rows must be excluded from drag reordering and keep their original array indexes.
+
+```tsx
+rowReorder={{
+  enabled: true,
+  handleColumnKey: "reorder",
+  onOrderChange: handleOrderChange,
+  isRowReorderable: (row) => !row.locked,
+}}
+```
+
+Rules:
+
+- Rows returning `false` cannot start dragging.
+- Locked rows keep their original positions in the final order calculation.
+- Even if the relative order between locked rows does not matter to the product, it is safest to think of them as being reinserted into their original slots.
 
 ### `classNames`
 
@@ -146,9 +168,10 @@ Implementation order:
 1. Confirm the target is a flat table.
 2. Use a stable `rowKey`.
 3. Add a dedicated drag handle column.
-4. Wire `rowReorder.enabled`, `handleColumnKey`, and `onOrderChange`.
-5. Reorder `data` state in `onOrderChange`.
-6. Add `tdRowDragHandle`, `trDragging`, or `trDragOver` styles if needed.
+4. Add `isRowReorderable` if some rows must stay locked.
+5. Wire `rowReorder.enabled`, `handleColumnKey`, and `onOrderChange`.
+6. Reorder `data` state in `onOrderChange`.
+7. Add `tdRowDragHandle`, `trDragging`, or `trDragOver` styles if needed.
 
 ## Allowed Combinations
 
@@ -187,3 +210,9 @@ Use a real domain ID converted to a string.
 This conflicts with click, edit, selection, and context menu interactions.
 
 Use only the dedicated `handleColumnKey` column as the drag handle.
+
+### Mistake 4. Treating locked rows like normal reorder targets
+
+This can move rows the product expected to keep fixed.
+
+Use `isRowReorderable` to declare the lock rule and trust the returned order to preserve those original positions.

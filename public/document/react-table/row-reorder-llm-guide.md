@@ -15,6 +15,7 @@ v1 기준 규칙:
 - 행 순서 변경은 flat table에서 사용합니다.
 - `rowKey`는 안정적인 문자열을 반환해야 합니다.
 - 테이블 내부가 데이터를 직접 바꾸지 않습니다. `onOrderChange`에서 소비자가 `data` 배열을 재정렬해야 합니다.
+- `isRowReorderable`를 쓰면 특정 행을 드래그 대상과 드롭 계산에서 제외하고 원래 인덱스를 유지시킬 수 있습니다.
 - `expand` 또는 `rowPinning`과 동시에 사용하지 않습니다.
 
 ## 필수 입력
@@ -59,6 +60,7 @@ interface Task {
   id: number;
   title: string;
   owner: string;
+  locked: boolean;
 }
 
 const columns: ColumnDef<Task>[] = [
@@ -67,16 +69,16 @@ const columns: ColumnDef<Task>[] = [
     label: "순서",
     width: "64px",
     align: "center",
-    render: () => "⋮⋮",
+    render: (row) => (row.locked ? "고정" : "⋮⋮"),
   },
   { key: "title", label: "업무", render: (row) => row.title },
   { key: "owner", label: "담당자", render: (row) => row.owner },
 ];
 
 const initialRows: Task[] = [
-  { id: 1, title: "계약 검토", owner: "김하늘" },
-  { id: 2, title: "견적 발송", owner: "박서준" },
-  { id: 3, title: "후속 미팅", owner: "이유진" },
+  { id: 2, title: "견적 발송", owner: "박서준", locked: true },
+  { id: 1, title: "계약 검토", owner: "김하늘", locked: false },
+  { id: 3, title: "후속 미팅", owner: "이유진", locked: false },
 ];
 
 export default function TaskTable() {
@@ -100,6 +102,7 @@ export default function TaskTable() {
         enabled: true,
         handleColumnKey: "reorder",
         onOrderChange: handleOrderChange,
+        isRowReorderable: (row) => !row.locked,
       }}
     />
   );
@@ -120,6 +123,25 @@ rowReorder={{
   dragOverColor: "rgba(79, 70, 229, 0.8)",
 }}
 ```
+
+### `isRowReorderable`
+
+특정 행을 순서 변경에서 제외하고 원래 배열 인덱스를 유지하고 싶을 때 사용합니다.
+
+```tsx
+rowReorder={{
+  enabled: true,
+  handleColumnKey: "reorder",
+  onOrderChange: handleOrderChange,
+  isRowReorderable: (row) => !row.locked,
+}}
+```
+
+중요 규칙:
+
+- `false`를 반환한 행은 드래그 시작이 막힙니다.
+- 고정된 행은 최종 순서 계산에서도 원래 위치를 유지합니다.
+- 고정 행끼리의 상대 순서가 중요하지 않더라도, 결과 배열에서는 기존 슬롯에 다시 배치된다고 이해하면 안전합니다.
 
 ### `classNames`
 
@@ -146,9 +168,10 @@ classNames={{
 1. 대상이 flat table인지 확인합니다.
 2. 안정적인 `rowKey`를 사용합니다.
 3. 드래그 핸들 전용 컬럼을 추가합니다.
-4. `rowReorder.enabled`, `handleColumnKey`, `onOrderChange`를 연결합니다.
-5. `onOrderChange`에서 `data` 상태를 재정렬합니다.
-6. 필요하면 `tdRowDragHandle`, `trDragging`, `trDragOver` 스타일을 추가합니다.
+4. 필요하면 `isRowReorderable`로 고정 행 조건을 정의합니다.
+5. `rowReorder.enabled`, `handleColumnKey`, `onOrderChange`를 연결합니다.
+6. `onOrderChange`에서 `data` 상태를 재정렬합니다.
+7. 필요하면 `tdRowDragHandle`, `trDragging`, `trDragOver` 스타일을 추가합니다.
 
 ## 이 파트에서 추가해도 되는 것
 
@@ -199,3 +222,13 @@ classNames={{
 좋은 방식:
 
 - `handleColumnKey`로 지정한 전용 컬럼만 드래그 핸들로 사용합니다.
+
+### 실수 4. 고정 행이 있어도 일반 reorder와 같은 방식으로만 생각함
+
+문제점:
+
+- 사용자는 특정 행이 움직이지 않기를 기대하지만 결과 배열에서 위치가 바뀔 수 있습니다.
+
+좋은 방식:
+
+- `isRowReorderable`로 고정 조건을 명시하고, 고정 행이 원래 인덱스를 유지한다는 전제로 `onOrderChange` 결과를 사용합니다.
