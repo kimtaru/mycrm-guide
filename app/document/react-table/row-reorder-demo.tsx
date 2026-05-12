@@ -10,14 +10,15 @@ interface Campaign {
   name: string;
   owner: string;
   stage: "준비" | "진행" | "검토";
+  locked: boolean;
 }
 
 const INITIAL_ROWS: Campaign[] = [
-  { id: 301, name: "신규 고객 온보딩", owner: "김하늘", stage: "준비" },
-  { id: 302, name: "상반기 리텐션", owner: "박서준", stage: "진행" },
-  { id: 303, name: "VIP 고객 케어", owner: "이유진", stage: "검토" },
-  { id: 304, name: "파트너 공동 캠페인", owner: "최민호", stage: "준비" },
-  { id: 305, name: "휴면 고객 재활성화", owner: "정다은", stage: "진행" },
+  { id: 302, name: "상반기 리텐션", owner: "박서준", stage: "진행", locked: true },
+  { id: 305, name: "휴면 고객 재활성화", owner: "정다은", stage: "진행", locked: true },
+  { id: 301, name: "신규 고객 온보딩", owner: "김하늘", stage: "준비", locked: false },
+  { id: 303, name: "VIP 고객 케어", owner: "이유진", stage: "검토", locked: false },
+  { id: 304, name: "파트너 공동 캠페인", owner: "최민호", stage: "준비", locked: false },
 ];
 
 const columns: ColumnDef<Campaign>[] = [
@@ -43,15 +44,20 @@ const columns: ColumnDef<Campaign>[] = [
     label: "순서",
     width: "72px",
     align: "center",
-    render: () => (
-      <span
-        aria-label="행 순서 변경"
-        className="material-symbols-outlined text-[20px] text-on-surface-variant/70"
-        style={{ fontVariationSettings: "'wght' 300" }}
-      >
-        drag_indicator
-      </span>
-    ),
+    render: (row) =>
+      row.locked ? (
+        <span className="inline-flex min-w-10 items-center justify-center rounded-full bg-error/12 px-2 py-0.5 text-[11px] font-semibold text-error">
+          고정
+        </span>
+      ) : (
+        <span
+          aria-label="행 순서 변경"
+          className="material-symbols-outlined text-[20px] text-on-surface-variant/70"
+          style={{ fontVariationSettings: "'wght' 300" }}
+        >
+          drag_indicator
+        </span>
+      ),
   },
 ];
 
@@ -84,7 +90,7 @@ export default function RowReorderDemo({ codeHtml }: { codeHtml: string }) {
       <div className="bg-surface-container-lowest p-6">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs text-on-surface-variant">
-            순서 컬럼의 핸들을 드래그해서 행 위치를 변경합니다.
+            상단의 <code>고정</code> 행은 제자리를 유지하고, 그 아래 행만 드래그로 순서를 바꿉니다.
           </p>
           <div className="rounded-lg bg-surface-container-low px-3 py-1.5 text-xs text-on-surface">
             order: <code>{JSON.stringify(rows.map((row) => row.id))}</code>
@@ -99,6 +105,7 @@ export default function RowReorderDemo({ codeHtml }: { codeHtml: string }) {
             enabled: true,
             handleColumnKey: "reorder",
             onOrderChange: handleOrderChange,
+            isRowReorderable: (row) => !row.locked,
           }}
           classNames={TABLE_CLASS_NAMES}
         />

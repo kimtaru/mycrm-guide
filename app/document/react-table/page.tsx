@@ -1175,6 +1175,7 @@ interface Campaign {
   name: string
   owner: string
   stage: '준비' | '진행' | '검토'
+  locked: boolean
 }
 
 const columns: ColumnDef<Campaign>[] = [
@@ -1183,11 +1184,13 @@ const columns: ColumnDef<Campaign>[] = [
     label: '순서',
     width: '72px',
     align: 'center',
-    render: () => (
-      <span className="material-symbols-outlined" aria-label="행 순서 변경">
-        drag_indicator
-      </span>
-    ),
+    render: (row) => row.locked
+      ? <span className="rounded-full bg-error/12 px-2 py-0.5 text-[11px] font-semibold text-error">고정</span>
+      : (
+          <span className="material-symbols-outlined" aria-label="행 순서 변경">
+            drag_indicator
+          </span>
+        ),
   },
   { key: 'name', label: '캠페인', render: (row) => row.name },
   { key: 'owner', label: '담당자', render: (row) => row.owner },
@@ -1195,10 +1198,11 @@ const columns: ColumnDef<Campaign>[] = [
 ]
 
 const initialRows: Campaign[] = [
-  { id: 301, name: '신규 고객 온보딩', owner: '김하늘', stage: '준비' },
-  { id: 302, name: '상반기 리텐션', owner: '박서준', stage: '진행' },
-  { id: 303, name: 'VIP 고객 케어', owner: '이유진', stage: '검토' },
-  { id: 304, name: '파트너 공동 캠페인', owner: '최민호', stage: '준비' },
+  { id: 302, name: '상반기 리텐션', owner: '박서준', stage: '진행', locked: true },
+  { id: 305, name: '휴면 고객 재활성화', owner: '정다은', stage: '진행', locked: true },
+  { id: 301, name: '신규 고객 온보딩', owner: '김하늘', stage: '준비', locked: false },
+  { id: 303, name: 'VIP 고객 케어', owner: '이유진', stage: '검토', locked: false },
+  { id: 304, name: '파트너 공동 캠페인', owner: '최민호', stage: '준비', locked: false },
 ]
 
 export default function RowReorderExample() {
@@ -1222,6 +1226,7 @@ export default function RowReorderExample() {
         enabled: true,
         handleColumnKey: 'reorder',
         onOrderChange: handleOrderChange,
+        isRowReorderable: (row) => !row.locked,
       }}
       classNames={{
         tdRowDragHandle: 'cursor-grab active:cursor-grabbing',
@@ -1507,7 +1512,8 @@ export default async function ReactTablePage() {
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">
               <code>rowReorder</code> 옵션으로 지정한 핸들 컬럼을 드래그해서 flat table의 행 순서를 변경합니다.
-              변경된 row key 순서는 <code>onOrderChange</code>에서 받아 데이터 상태에 반영합니다.
+              변경된 row key 순서는 <code>onOrderChange</code>에서 받아 데이터 상태에 반영하며,
+              <code>isRowReorderable</code>로 특정 행을 고정해 원래 인덱스를 유지할 수 있습니다.
             </p>
             <RowReorderDemo codeHtml={rowReorderHtml} />
           </section>
