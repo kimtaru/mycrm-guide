@@ -9,6 +9,7 @@ export interface ReactTableLlmGuidePart {
     | "loading"
     | "virtual-scroll"
     | "column-manager"
+    | "row-reorder"
     | "row-pinning"
     | "expand"
     | "row-events"
@@ -95,6 +96,14 @@ export const REACT_TABLE_LLM_GUIDE_PARTS: readonly ReactTableLlmGuidePart[] = [
     hintKo: "컬럼 숨김, 순서 변경, 고정, 너비 변경이 필요할 때 읽는다.",
     hintEn: "Read this when columns need hiding, reordering, pinning, or width control.",
     sectionHref: "/document/react-table#react-table-column-manager",
+  },
+  {
+    partSlug: "row-reorder",
+    titleKo: "행 순서 변경",
+    titleEn: "Row Reorder",
+    hintKo: "드래그앤드롭으로 flat table 행 순서를 변경해야 할 때 읽는다.",
+    hintEn: "Read this when flat-table rows need drag-and-drop reordering.",
+    sectionHref: "/document/react-table#react-table-row-reorder",
   },
   {
     partSlug: "row-pinning",
