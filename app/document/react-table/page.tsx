@@ -17,6 +17,7 @@ import EditingDemo from "./editing-demo";
 import LoadingDemo from "./loading-demo";
 import VirtualScrollDemo from "./virtual-scroll-demo";
 import ColumnManagerDemo from "./column-manager-demo";
+import RowReorderDemo from "./row-reorder-demo";
 import RowPinningDemo from "./row-pinning-demo";
 import ExpandDemo from "./expand-demo";
 import RowEventsDemo from "./row-events-demo";
@@ -1165,6 +1166,72 @@ export default function RowPinningExample() {
   )
 }`;
 
+const ROW_REORDER_CODE = `import { useState } from 'react'
+import { Table } from '@mycrm-ui/react-table'
+import type { ColumnDef } from '@mycrm-ui/react-table'
+
+interface Campaign {
+  id: number
+  name: string
+  owner: string
+  stage: '준비' | '진행' | '검토'
+}
+
+const columns: ColumnDef<Campaign>[] = [
+  {
+    key: 'reorder',
+    label: '순서',
+    width: '72px',
+    align: 'center',
+    render: () => (
+      <span className="material-symbols-outlined" aria-label="행 순서 변경">
+        drag_indicator
+      </span>
+    ),
+  },
+  { key: 'name', label: '캠페인', render: (row) => row.name },
+  { key: 'owner', label: '담당자', render: (row) => row.owner },
+  { key: 'stage', label: '단계', render: (row) => row.stage },
+]
+
+const initialRows: Campaign[] = [
+  { id: 301, name: '신규 고객 온보딩', owner: '김하늘', stage: '준비' },
+  { id: 302, name: '상반기 리텐션', owner: '박서준', stage: '진행' },
+  { id: 303, name: 'VIP 고객 케어', owner: '이유진', stage: '검토' },
+  { id: 304, name: '파트너 공동 캠페인', owner: '최민호', stage: '준비' },
+]
+
+export default function RowReorderExample() {
+  const [rows, setRows] = useState(initialRows)
+
+  const handleOrderChange = (order: string[]) => {
+    setRows((prev) => {
+      const rowMap = new Map(prev.map((row) => [String(row.id), row]))
+      return order
+        .map((key) => rowMap.get(key))
+        .filter((row): row is Campaign => row !== undefined)
+    })
+  }
+
+  return (
+    <Table
+      columns={columns}
+      data={rows}
+      rowKey={(row) => String(row.id)}
+      rowReorder={{
+        enabled: true,
+        handleColumnKey: 'reorder',
+        onOrderChange: handleOrderChange,
+      }}
+      classNames={{
+        tdRowDragHandle: 'cursor-grab active:cursor-grabbing',
+        trDragging: 'opacity-50',
+        trDragOver: 'bg-primary/5',
+      }}
+    />
+  )
+}`;
+
 async function highlight(code: string) {
   return codeToHtml(code, { lang: "tsx", theme: "one-dark-pro" });
 }
@@ -1189,6 +1256,7 @@ const TOC_GROUPS: TocGroup[] = [
       { id: "react-table-loading", label: "로딩 / 빈 상태" },
       { id: "react-table-virtual-scroll", label: "가상 스크롤" },
       { id: "react-table-column-manager", label: "컬럼 관리" },
+      { id: "react-table-row-reorder", label: "행 순서 변경" },
       { id: "react-table-row-pinning", label: "행 상단 고정" },
       { id: "react-table-expand", label: "확장 행" },
       { id: "react-table-row-events", label: "행 클릭 / 키보드" },
@@ -1201,7 +1269,7 @@ const TOC_GROUPS: TocGroup[] = [
 ];
 
 export default async function ReactTablePage() {
-  const [basicHtml, singleSortHtml, multiSortHtml, selectionHtml, filterHtml, rowActionsHtml, editingHtml, loadingHtml, virtualScrollHtml, columnManagerHtml, rowPinningHtml, expandHtml, rowEventsHtml, tooltipCopyHtml, headerMenuHtml] = await Promise.all([
+  const [basicHtml, singleSortHtml, multiSortHtml, selectionHtml, filterHtml, rowActionsHtml, editingHtml, loadingHtml, virtualScrollHtml, columnManagerHtml, rowReorderHtml, rowPinningHtml, expandHtml, rowEventsHtml, tooltipCopyHtml, headerMenuHtml] = await Promise.all([
     highlight(BASIC_CODE),
     highlight(SINGLE_SORT_CODE),
     highlight(MULTI_SORT_CODE),
@@ -1212,6 +1280,7 @@ export default async function ReactTablePage() {
     highlight(LOADING_CODE),
     highlight(VIRTUAL_SCROLL_CODE),
     highlight(COLUMN_MANAGER_CODE),
+    highlight(ROW_REORDER_CODE),
     highlight(ROW_PINNING_CODE),
     highlight(EXPAND_CODE),
     highlight(ROW_EVENTS_CODE),
@@ -1424,6 +1493,23 @@ export default async function ReactTablePage() {
             </div>
             <p className="mb-6 leading-relaxed text-on-surface-variant">컬럼 숨김, 순서 변경, 고정(pin), 리사이즈를 지원합니다. 헤더 메뉴에서 컬럼 관리 모달을 열고, 드래그로 순서를 변경할 수 있습니다.</p>
             <ColumnManagerDemo codeHtml={columnManagerHtml} />
+          </section>
+
+          <section className="mb-16" id="react-table-row-reorder">
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="material-symbols-outlined">drag_indicator</span>
+                </div>
+                <h2 className="text-2xl font-bold text-on-surface">행 순서 변경</h2>
+              </div>
+              <LlmGuideActions partSlug="row-reorder" />
+            </div>
+            <p className="mb-6 leading-relaxed text-on-surface-variant">
+              <code>rowReorder</code> 옵션으로 지정한 핸들 컬럼을 드래그해서 flat table의 행 순서를 변경합니다.
+              변경된 row key 순서는 <code>onOrderChange</code>에서 받아 데이터 상태에 반영합니다.
+            </p>
+            <RowReorderDemo codeHtml={rowReorderHtml} />
           </section>
 
           <section className="mb-16" id="react-table-row-pinning">
