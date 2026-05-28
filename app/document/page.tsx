@@ -107,6 +107,14 @@ pnpm add @mycrm-ui/react-table`}</code>
                 </p>
                 <div className="mt-6 space-y-4">
                   <div>
+                    <p className="mb-2 font-medium text-on-surface">Calendar / DatePicker를 사용하는 경우</p>
+                    <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-4 font-mono text-sm text-inverse-on-surface shadow-lg">
+                      <code>{`npm install @mycrm-ui/components
+
+import { Calendar, DatePicker } from '@mycrm-ui/components'`}</code>
+                    </pre>
+                  </div>
+                  <div>
                     <p className="mb-2 font-medium text-on-surface">유틸리티 / 타입 / 포맷터만 사용하는 경우</p>
                     <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-4 font-mono text-sm text-inverse-on-surface shadow-lg">
                       <code>npm install @mycrm-ui/core</code>
@@ -121,7 +129,7 @@ pnpm add @mycrm-ui/react-table`}</code>
                   <div>
                     <p className="mb-2 font-medium text-on-surface">모든 패키지 설치</p>
                     <pre className="overflow-x-auto rounded-xl bg-inverse-surface p-4 font-mono text-sm text-inverse-on-surface shadow-lg">
-                      <code>{`npm install @mycrm-ui/core @mycrm-ui/table @mycrm-ui/react @mycrm-ui/react-table`}</code>
+                      <code>{`npm install @mycrm-ui/core @mycrm-ui/table @mycrm-ui/react @mycrm-ui/react-table @mycrm-ui/components`}</code>
                     </pre>
                   </div>
                 </div>
@@ -147,6 +155,9 @@ npm install @mycrm-ui/react-table`}</code>
   └── react, react-dom      (peer, 직접 설치 필요)
 
 @mycrm-ui/react
+  └── react, react-dom      (peer, 직접 설치 필요)
+
+@mycrm-ui/components
   └── react, react-dom      (peer, 직접 설치 필요)
 
 @mycrm-ui/table             (의존성 없음)

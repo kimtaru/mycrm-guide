@@ -51,6 +51,20 @@ const COMPONENT_GROUPS: SubGroup[] = [
       { href: "/document/react-table#column-def", label: "ColumnDef 옵션" },
     ],
   },
+  {
+    label: "Calendar",
+    items: [
+      { href: "/document/calendar#calendar-basic", label: "기본 사용" },
+      { href: "/document/calendar#calendar-range", label: "Range 선택" },
+      { href: "/document/calendar#calendar-multiple", label: "Multiple 선택" },
+      { href: "/document/calendar#calendar-pending", label: "Pending / API 연동" },
+      { href: "/document/calendar#date-picker", label: "DatePicker" },
+      { href: "/document/calendar#date-picker-advanced", label: "DatePicker 고급 옵션" },
+      { href: "/document/calendar#calendar-api", label: "Calendar API" },
+      { href: "/document/calendar#date-picker-api", label: "DatePicker API" },
+      { href: "/document/calendar#calendar-classnames", label: "CSS 커스터마이징" },
+    ],
+  },
 ];
 
 function CollapsibleGroup({ group }: { group: SubGroup }) {

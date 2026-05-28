@@ -26,6 +26,15 @@ pnpm add @mycrm-ui/react-table
 
 > `@mycrm-ui/react-table`은 내부적으로 `@mycrm-ui/table`에 의존합니다. 별도로 설치할 필요 없습니다.
 
+**Calendar / DatePicker를 사용하는 경우**
+```bash
+npm install @mycrm-ui/components
+```
+
+```ts
+import { Calendar, DatePicker } from '@mycrm-ui/components'
+```
+
 **유틸리티 / 타입 / 포맷터만 사용하는 경우**
 ```bash
 npm install @mycrm-ui/core
@@ -38,7 +47,7 @@ npm install @mycrm-ui/table
 
 **모든 패키지 설치**
 ```bash
-npm install @mycrm-ui/core @mycrm-ui/table @mycrm-ui/react @mycrm-ui/react-table
+npm install @mycrm-ui/core @mycrm-ui/table @mycrm-ui/react @mycrm-ui/react-table @mycrm-ui/components
 ```
 
 ### Peer Dependencies
@@ -58,6 +67,9 @@ npm install @mycrm-ui/react-table
   └── react, react-dom      (peer, 직접 설치 필요)
 
 @mycrm-ui/react
+  └── react, react-dom      (peer, 직접 설치 필요)
+
+@mycrm-ui/components
   └── react, react-dom      (peer, 직접 설치 필요)
 
 @mycrm-ui/table             (의존성 없음)

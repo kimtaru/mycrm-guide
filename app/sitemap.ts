@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/document/core",
     "/document/react",
     "/document/react-table",
+    "/document/calendar",
     "/document/react-table/llm",
   ];
 
