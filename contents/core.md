@@ -50,7 +50,9 @@ formatDate('20260324', '', 4)                 // '0324'
 
 // 숫자 포맷
 formatNumber(1234567)                          // '1,234,567'
+formatNumber('1234567')                        // '1,234,567'
 formatNumber(0.1234, { style: 'percent' })     // '12%'
+formatNumber('12abc')                          // ''
 
 // 통화 포맷
 formatCurrency(50000)                          // '₩50,000'

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { createPageMetadata } from "../../lib/metadata";
 import TocAside from "../toc-aside";
 import type { TocGroup } from "../toc-aside";
@@ -41,6 +42,15 @@ export default function CorePage() {
               유틸리티 패키지입니다. 타입, 헬퍼 함수, 포맷터, 에러 클래스를
               프레임워크 독립적으로 제공합니다.
             </p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <Link
+                href="/document/core/features"
+                className="inline-flex items-center gap-2 rounded-full border border-tertiary/25 bg-tertiary/8 px-4 py-2 text-sm font-semibold text-tertiary transition-colors hover:border-tertiary/40 hover:bg-tertiary/12"
+              >
+                <span className="material-symbols-outlined text-base">article</span>
+                제공 기능 전체보기
+              </Link>
+            </div>
           </header>
 
           <section className="mb-16" id="core-types">
@@ -152,7 +162,9 @@ formatDate('20260324', '', 4)                 // '0324'
 
 // 숫자 포맷
 formatNumber(1234567)                          // '1,234,567'
+formatNumber('1234567')                        // '1,234,567'
 formatNumber(0.1234, { style: 'percent' })     // '12%'
+formatNumber('12abc')                          // ''
 
 // 통화 포맷
 formatCurrency(50000)                          // '₩50,000'
@@ -174,12 +186,12 @@ formatPhoneNumber('0212345678')                // '02-1234-5678'`}</code>
                 <tbody>
                   <tr className="border-t border-outline-variant/20">
                     <td className="px-4 py-3 font-mono text-xs">formatDate</td>
-                    <td className="px-4 py-3 text-on-surface-variant">value, pattern?, locale?</td>
+                    <td className="px-4 py-3 text-on-surface-variant">value, separator?, length?</td>
                     <td className="px-4 py-3 font-mono text-xs">string</td>
                   </tr>
                   <tr className="border-t border-outline-variant/20">
                     <td className="px-4 py-3 font-mono text-xs">formatNumber</td>
-                    <td className="px-4 py-3 text-on-surface-variant">value, options?</td>
+                    <td className="px-4 py-3 text-on-surface-variant">value, options?, locale?</td>
                     <td className="px-4 py-3 font-mono text-xs">string</td>
                   </tr>
                   <tr className="border-t border-outline-variant/20">
@@ -189,7 +201,7 @@ formatPhoneNumber('0212345678')                // '02-1234-5678'`}</code>
                   </tr>
                   <tr className="border-t border-outline-variant/20">
                     <td className="px-4 py-3 font-mono text-xs">formatPhoneNumber</td>
-                    <td className="px-4 py-3 text-on-surface-variant">value</td>
+                    <td className="px-4 py-3 text-on-surface-variant">value, countryCode?</td>
                     <td className="px-4 py-3 font-mono text-xs">string</td>
                   </tr>
                 </tbody>
