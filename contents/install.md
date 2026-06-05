@@ -112,5 +112,5 @@ dist/index.d.ts  — TypeScript 타입 선언
 import { formatDate } from '@mycrm-ui/core'
 import { Table } from '@mycrm-ui/react-table'
 
-console.log(formatDate(new Date(), 'YYYY-MM-DD'))
+console.log(formatDate(new Date()))
 ```

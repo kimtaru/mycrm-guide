@@ -42,9 +42,11 @@ const omitted = omit(obj, ['password'])
 import { formatDate, formatNumber, formatCurrency, formatPhoneNumber } from '@mycrm-ui/core'
 
 // 날짜 포맷
-formatDate(new Date(), 'YYYY-MM-DD')          // '2026-03-24'
-formatDate('2026-03-24', 'YYYY년 MM월 DD일')  // '2026년 03월 24일'
-formatDate(new Date(), undefined, 'en-US')    // Intl 기본 포맷
+formatDate(new Date())                        // '2026-03-24'
+formatDate('20260324', '.')                   // '2026.03.24'
+formatDate('2026-03-24', '')                  // '20260324'
+formatDate('20260324', null, 6)               // '26-03-24'
+formatDate('20260324', '', 4)                 // '0324'
 
 // 숫자 포맷
 formatNumber(1234567)                          // '1,234,567'
